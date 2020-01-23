@@ -7,9 +7,9 @@ import SignUp from "./screen/users/SignUp";
 const MainRouter = () => (
     <div>
         <Switch>
-            <Route exact path="/" component={Post}  />
+            <Route exact path="/Posts" component={Post}  />
             <Route exact path="/SignIn" component={SignIn} />
-            <Route exact path="/SignUp" component={SignUp} />
+            <Route exact path="/" component={SignUp} />
         </Switch>
     </div>
 );

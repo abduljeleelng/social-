@@ -1,40 +1,169 @@
-import React from 'react';
+import React,{Fragment} from 'react';
 import {Link} from 'react-router-dom';
+import {Card, CardImg, CardText, CardBody, CardTitle,CardFooter, CardLink, CardSubtitle, Button} from 'reactstrap';
 
-export const Header = () => {
+export const NewPostCard = () => {
     return(
-        <div className="header">
-            <div className="container">
-                <div className="row text-center">
-                    <div className="col-md-2 text-center">logo</div>
-                    <div className="col-md-6 text-center"> <input className="form-control" placeholder="Search ..." /></div>
-                    <div className="col-md-4 text-center"> <Link to="/SignUp">Register </Link> | <Link to="/SignIn">Login </Link>  </div>
-                </div>
-            </div>
+<div className="card card-small">
+  <div className="share-box-inner">
+    {/* profile picture end */}
+    <div className="profile-thumb">
+      <a href="#">
+        <figure className="profile-thumb-middle">
+          <img src="assets/images/profile/profile-small-37.jpg" alt="profile picture" />
+        </figure>
+      </a>
+    </div>
+    {/* profile picture end */}
+    {/* share content box start */}
+    <div className="share-content-box w-100">
+      <form className="share-text-box">
+        <textarea name="share" className="share-text-field" aria-disabled="true" placeholder="Say Something" data-toggle="modal" data-target="#textbox" id="email" defaultValue={""} />
+        <button className="btn-share" type="submit">share</button>
+      </form>
+    </div>
+    {/* share content box end */}
+    {/* Modal start */}
+    <div className="modal fade" id="textbox" aria-labelledby="textbox">
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Share Your Mood</h5>
+            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div className="modal-body custom-scroll">
+            <textarea name="share" className="share-field-big custom-scroll" placeholder="Say Something" defaultValue={""} />
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="post-share-btn" data-dismiss="modal">cancel</button>
+            <button type="button" className="post-share-btn">post</button>
+          </div>
         </div>
+      </div>
+    </div>
+    {/* Modal end */}
+  </div>
+</div>
+
     )
 }
-export const PostCard = (props)=>{
-     console.log("post from card "+props)
+
+export const ReadPostCard = () => {
     return(
-        <div className="card" style={{width: '34rem'}}>
-            <img src={props.logo} className="card-img-top" alt={props.title} />
-            <div className="card-header">
-                Post Title
-            </div>
-            <div className="card-body">
-                <p className="card-text">{props.body}</p>
-            </div>
-            <div className="card-footer">
-            <Link to="/" className="card-link">Read More ... </Link> |
-            <Link to="/" className="card-link">Like </Link> | 
-            <Link to="/" className="card-link">comment  </Link> | 
-            </div>
-        </div>
+<div className="card">
+  {/* post title start */}
+  <div className="post-title d-flex align-items-center">
+    {/* profile picture end */}
+    <div className="profile-thumb">
+      <a href="#">
+        <figure className="profile-thumb-middle">
+          <img src="assets/images/profile/profile-small-1.jpg" alt="profile picture" />
+        </figure>
+      </a>
+    </div>
+    {/* profile picture end */}
+    <div className="posted-author">
+      <h6 className="author"><a href="profile.html">merry watson</a></h6>
+      <span className="post-time">20 min ago</span>
+    </div>
+    <div className="post-settings-bar">
+      <span />
+      <span />
+      <span />
+      <div className="post-settings arrow-shape">
+        <ul>
+          <li><button>copy link to adda</button></li>
+          <li><button>edit post</button></li>
+          <li><button>embed adda</button></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  {/* post title start */}
+  <div className="post-content">
+    <p className="post-desc">
+      Many desktop publishing packages and web page editors now use Lorem Ipsum as their
+      default model text, and a search for 'lorem ipsum' will uncover many web sites still
+      in their infancy.
+    </p>
+    <div className="post-thumb-gallery">
+      <figure className="post-thumb img-popup">
+        <a href="assets/images/post/post-large-1.jpg">
+          <img src="assets/images/post/post-1.jpg" alt="post image" />
+        </a>
+      </figure>
+    </div>
+    <div className="post-meta">
+      <button className="post-meta-like">
+        <i className="bi bi-heart-beat" />
+        <span>You and 201 people like this</span>
+        <strong>201</strong>
+      </button>
+      <ul className="comment-share-meta">
+        <li>
+          <button className="post-comment">
+            <i className="bi bi-chat-bubble" />
+            <span>41</span>
+          </button>
+        </li>
+        <li>
+          <button className="post-share">
+            <i className="bi bi-share" />
+            <span>07</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+    )
+}
+
+
+
+
+export const PostCard = ({posts})=>{
+    return(
+        posts.map((post,index)=>{
+            return(
+                <Fragment key={index}>
+                <Card >
+                <CardImg src={post.logo} className="card-img-top" alt={post.title} />
+                <CardBody>
+                <CardTitle> {post.title} </CardTitle>
+                <CardText>{post.body}</CardText>
+                <CardFooter>
+                <Link to="/" className="card-link">Read More ... </Link> |
+                <Link to="/" className="card-link">Like </Link> | 
+                <Link to="/" className="card-link">comment  </Link> | 
+                </CardFooter>
+                </CardBody>
+               </Card>
+               <hr />
+               </Fragment>
+            )
+        })
+        
     )
 };
+export const PostTitle = ({posts})=>{
+    return(
+        posts.map((post,index)=>(
+            <Fragment key={index}>
+                <hr />
+                <Card>
+                     <CardTitle className="text-center">{post.title}</CardTitle>
+                </Card>
+            
+            </Fragment>
+        ))
+    )
+}
 export const SinglePostCard = (props)=>{
-    console.log("post from card "+props)
+    
    return(
        <div className="card" style={{width: '34rem'}}>
            <img src={props.logo} className="card-img-top" alt={props.title} />
@@ -51,7 +180,7 @@ export const SinglePostCard = (props)=>{
    )
 };
 
-export const NewPostCard = ({logo,title,body}) =>{
+export const NewPostCardA = ({logo,title,body}) =>{
 
     return(
         <div className="card" style={{width: '34rem'}}>

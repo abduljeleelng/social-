@@ -1,52 +1,91 @@
 import React,{Component} from 'react';
-import {PostCard} from '../../componet/Card';
-import { Footer } from '../../componet/Footer.jsx';
-import {MainHeader } from '../../componet/Header.jsx';;
+import {Container,Row,Col} from 'reactstrap'
+import {PostCard,PostTitle, NewPostCard, PostsCard, ReadPostCard} from '../../componet/Card';
+import { Footer, ScrollToTop, SecondFooter } from '../../componet/Footer.jsx';
+import {MainHeader, SecondHeader } from '../../componet/Header.jsx';
+import {postList} from "./apiPost"
+import { CardProfile, LikeCard, TopNew } from '../../componet/RSideBar';
+import { Notifications, Advert, FriendsZOne } from '../../componet/LSideBar';
 
 class Post extends Component{
     constructor(props){
         super(props);
         this.state= {
-            post:[
-                {
-                    "_id": "5e1a51ed6f744f12bc259216",
-                    "title": "Upadating post ",
-                    "body": "updateing body ",
-                    "created": "2020-01-11T22:53:33.005Z",
-                    "postedBy": {
-                        "_id": "5e13098730d38e3e9cf75056",
-                        "email": "abduljeleelng@gmail.com",
-                        "name": "Abduljeleel Ola"
-                    }
-                }
-            ],
+            post:[],
         };
     };
+    loadPosts(){
+        postList().then(data=>{
+            if(data.undefined || data.error || data.null){
+                alert("server Error");
+            }
+            this.setState({post:data});
+        })
+    }
+    componentDidMount(){
+        this.loadPosts();
+    }
     render(){
-        const {post}=this.state;
-        const {title,body}=post
-        console.log(body,title)
+        const {post} = this.state;
+        ///console.log(JSON.stringify(post));
         return(
             <>
             <MainHeader />
-                <div className="container">
-                    <div className="row postCat">
-                        <div className="col-md-3">
-                         
-                        </div>
-                        <div className="col-md-6">
-                            <br  />
+            <SecondHeader />
+<main>
+  <div className="main-wrapper pt-80">
+    <div className="container">
+      <div className="row">
+        <div className="col-lg-3 order-2 order-lg-1">
+          <aside className="widget-area">
+              <CardProfile />
+              <LikeCard />
+              <TopNew />
+          </aside>
+        </div>
+       <div className="col-lg-6 order-1 order-lg-2" >
+           <NewPostCard />
+           <ReadPostCard />
+           
+       </div>
+      <div className="col-lg-3 order-3">
+                <aside className="widget-area">
+                    <Notifications />
+                    <Advert />
+                    <FriendsZOne />
+                </aside>
+       </div>
+      </div>
+    </div>
+  </div>
+</main>
+<ScrollToTop />
+
+{/*<Footer />*/}
+{/*<SecondFooter />*/}
+
+
+
+            {/*
+            <MainHeader />
+            <SecondHeader />
+                <Container>
+                    <Row>
+                        <Col md="8" xs="8" sm="8" className="postCat"> 
                             <div className="post">
-                                    <PostCard  title="" body="body of the post " />
+                                    <PostCard  posts={post} />
                             </div>        
-                        </div>
-                        <div className="col-md-3">
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
+                        </Col>
+                        
+                         <Col md="4" xs="4" sm="4"> <br /><br /> <PostTitle posts={post} /></Col>
+                       
+                    </Row>
+              
+                </Container>
+                <Container>
                    <Footer />
-                </div>
+                </Container>
+            */}
             </>
 
         )
