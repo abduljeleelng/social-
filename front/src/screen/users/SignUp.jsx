@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import {Link, Redirect} from 'react-router-dom';
+import { Redirect} from 'react-router-dom';
 import SweetAlert from 'sweetalert2-react'
-import { MainHeader } from '../../componet/Header';
-import { Footer } from '../../componet/Footer';
-import {signup, signin, authenticate } from '../../auth';
+
+import Login from '../../componet/users/Login';
+
+import {signup } from '../../auth';
 
 
 function validateEmail(email) {
@@ -35,40 +36,6 @@ export default class SignUp extends Component {
         this.setState({[name]:e.target.value});
         this.setState({message:'',error:'',note:false,redirecTo:false,regError:""});
     };
-    handleSignIn=e=>{
-        e.preventDefault();
-        this.setState({loading:true});
-        const {email,password}=this.state;
-        const user = {email,password};
-        console.log(JSON.stringify(user));
-         if (password !== "" && validateEmail(email)){
-             signin(user)
-             .then(data=>{
-                 if(data===undefined){
-                    this.setState({loading:false});
-                    this.setState({error:"network | Internal server Error"});
-                 }
-                 else if(data.token){
-                 authenticate(data,()=>{
-                     this.setState({user:data.user,redirecTo:true,email:"",password:"",loading:false});
-                 })
-                }
-                else if (data.error){
-                    this.setState({loading:false});
-                    this.setState({error:data.error});
-                }
-                else{
-                    this.setState({loading:false});
-                    this.setState({error:"Undentify Error, Conatct Web Admin"});
-                }
-             })
-        }
-        else{
-            this.setState({loading:false});
-            this.setState({error:"Enter valid email and Password"});
-        }
-    }
-
     HandleSignUp =e=>{
         e.preventDefault();
         this.setState({loading:true});
@@ -87,9 +54,8 @@ export default class SignUp extends Component {
     };
 
     render() {
-        const {email,password,firstName,lastName,gender,age,country,loading,error,regError ,redirecTo,note,message} = this.state;
+        const {email,password,firstName,lastName,gender,age,country,loading,regError ,redirecTo,note,message} = this.state;
         if(redirecTo){return <Redirect to="Posts" />}
-
         return (
             <>
             <SweetAlert
@@ -107,7 +73,7 @@ export default class SignUp extends Component {
             <div className="col-lg-6">
               <div className="timeline-logo-area d-flex align-items-center">
                 <div className="timeline-logo">
-                  <a href="index.html">
+                  <a href="/">
                     <img src="assets/images/logo/logo.png" alt="timeline logo" />
                   </a>
                 </div>
@@ -117,20 +83,8 @@ export default class SignUp extends Component {
               </div>
             </div>
             <div className="col-lg-6">
-              <div className="login-area">
-                <div className="row align-items-center">
-                  <div className="col-12 col-sm">
-                    <input type="email" onChange={this.handleChange("email")} value={email} placeholder="Email " className="single-field" />
-                  </div>
-                  <div className="col-12 col-sm">
-                    <input type="password" onChange={this.handleChange("password")} value={password} placeholder="Password" className="single-field" />
-                  </div>
-                  <div className="col-12 col-sm-auto">
-                    {loading ? ("loading ...."):(<button onClick={this.handleSignIn} className="login-btn">Login</button>)}
-                  </div>
-                </div>
-                <p style={{color:'white'}}> {error} </p>
-              </div>
+              {/*** login component here  */}
+              <Login />
             </div>
           </div>
         </div>
@@ -139,7 +93,7 @@ export default class SignUp extends Component {
         <div className="container-fluid p-0">
           <div className="row no-gutters">
             <div className="col-lg-6 order-2 order-lg-1">
-              <div className="timeline-bg-content bg-img" data-bg="assets/images/timeline/adda-timeline.jpg">
+              <div className="timeline-bg-content bg-img" data-bg="../../assets/images/timeline/adda-timeline.jpg">
                 <h3 className="timeline-bg-title">Let’s see what’s happening to you and your world. Welcome I am a Catholic.</h3>
               </div>
             </div>

@@ -1,9 +1,10 @@
 import React,{Component} from 'react';
 import {Container,Row,Col} from 'reactstrap'
-import {PostCard,PostTitle, NewPostCard, PostsCard, ReadPostCard} from '../../componet/Card';
-import { Footer, ScrollToTop, SecondFooter } from '../../componet/Footer.jsx';
+import { NewPostCard,  ReadPostCard,EmptyPost} from '../../componet/Card';
+import {  ScrollToTop, } from '../../componet/Footer.jsx';
 import {MainHeader, SecondHeader } from '../../componet/Header.jsx';
-import {postList} from "./apiPost"
+import {postList} from "./apiPost";
+import CreatePost from "./CreatePost";
 import { CardProfile, LikeCard, TopNew } from '../../componet/RSideBar';
 import { Notifications, Advert, FriendsZOne } from '../../componet/LSideBar';
 
@@ -12,22 +13,35 @@ class Post extends Component{
         super(props);
         this.state= {
             post:[],
+            page:1,
         };
     };
-    loadPosts(){
+    loadPosts(page){
         postList().then(data=>{
             if(data.undefined || data.error || data.null){
                 alert("server Error");
             }
             this.setState({post:data});
         })
-    }
+    };
+
     componentDidMount(){
-        this.loadPosts();
-    }
+        const {page}=this.state;
+        this.loadPosts(page);
+    };
+
+    loadMore = number => {
+        this.setState({ page: this.state.page + number });
+        this.loadPosts(this.state.page + number);
+    };
+
+    loadLess = number => {
+        this.setState({ page: this.state.page - number });
+        this.loadPosts(this.state.page - number);
+    };
+
     render(){
         const {post} = this.state;
-        ///console.log(JSON.stringify(post));
         return(
             <>
             <MainHeader />
@@ -44,9 +58,10 @@ class Post extends Component{
           </aside>
         </div>
        <div className="col-lg-6 order-1 order-lg-2" >
-           <NewPostCard />
-           <ReadPostCard />
-           
+           <CreatePost />
+           {post.length > 0 ? post.map((post,index)=>(
+               <ReadPostCard key={index} post={post} />
+                )):<EmptyPost post={post} />}
        </div>
       <div className="col-lg-3 order-3">
                 <aside className="widget-area">

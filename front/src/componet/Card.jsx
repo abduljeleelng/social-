@@ -1,8 +1,9 @@
-import React,{Fragment} from 'react';
+import React,{Fragment,Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Card, CardImg, CardText, CardBody, CardTitle,CardFooter, CardLink, CardSubtitle, Button} from 'reactstrap';
 
 export const NewPostCard = () => {
+  ///const {title,body} =this.state;
     return(
 <div className="card card-small">
   <div className="share-box-inner">
@@ -34,7 +35,9 @@ export const NewPostCard = () => {
             </button>
           </div>
           <div className="modal-body custom-scroll">
-            <textarea name="share" className="share-field-big custom-scroll" placeholder="Say Something" defaultValue={""} />
+            <input name="share" className="form-control" placeholder="Title of your post"  />
+            <br />
+            <textarea name="share" className="share-field-big custom-scroll" placeholder="Say Something"  />
           </div>
           <div className="modal-footer">
             <button type="button" className="post-share-btn" data-dismiss="modal">cancel</button>
@@ -50,7 +53,7 @@ export const NewPostCard = () => {
     )
 }
 
-export const ReadPostCard = () => {
+export const ReadPostCard = ({post}) => {
     return(
 <div className="card">
   {/* post title start */}
@@ -65,8 +68,8 @@ export const ReadPostCard = () => {
     </div>
     {/* profile picture end */}
     <div className="posted-author">
-      <h6 className="author"><a href="profile.html">merry watson</a></h6>
-      <span className="post-time">20 min ago</span>
+      <h6 className="author"><a href="profile.html">{post.postedBy.name ? post.postedBy.name: "Unkmow Poster" }</a></h6>
+      <span className="post-time">on {new Date(post.created).toDateString()} </span>
     </div>
     <div className="post-settings-bar">
       <span />
@@ -74,7 +77,7 @@ export const ReadPostCard = () => {
       <span />
       <div className="post-settings arrow-shape">
         <ul>
-          <li><button>copy link to adda</button></li>
+          <li><button>Delete</button></li>
           <li><button>edit post</button></li>
           <li><button>embed adda</button></li>
         </ul>
@@ -83,10 +86,9 @@ export const ReadPostCard = () => {
   </div>
   {/* post title start */}
   <div className="post-content">
+    <h4>{post.title}</h4>
     <p className="post-desc">
-      Many desktop publishing packages and web page editors now use Lorem Ipsum as their
-      default model text, and a search for 'lorem ipsum' will uncover many web sites still
-      in their infancy.
+      {post.body.substring(0,100)}
     </p>
     <div className="post-thumb-gallery">
       <figure className="post-thumb img-popup">
@@ -122,8 +124,18 @@ export const ReadPostCard = () => {
     )
 }
 
-
-
+export const EmptyPost =({post})=>{
+  return(
+      <div className="card">
+        <div className="post-content">
+          <h4 style={{alignContent:"center"}} className="text-center"> No Post from Any Users </h4>
+          <p className="post-desc text-center"> you can login and ppost to the communities</p>
+          <div className="post-meta">
+          </div>
+        </div>
+      </div>
+  )
+}
 
 export const PostCard = ({posts})=>{
     return(
