@@ -1,7 +1,7 @@
 import {API} from '../config';
 
 export const signup = user => {
-    return fetch(`${API}/signup`, {
+    return fetch(`${API }/signup`, {
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -61,11 +61,12 @@ export const isAuthenticated = () => {
     if (typeof window == "undefined") {
         return false;
     }
-
     if (localStorage.getItem("jwt")) {
         return JSON.parse(localStorage.getItem("jwt"));
     } else {
-        return false;
+        //return false;
+        return "";
+        console.log("un authorized users ");
     }
 };
 

@@ -41,7 +41,7 @@ export default class SignUp extends Component {
         this.setState({loading:true});
         const {email,password,firstName,lastName,gender,age,country}=this.state;
         const user = {email,password,firstName,lastName,gender,age,country};
-        console.log(JSON.stringify(user));
+        //console.log(JSON.stringify(user));
         signup(user).then(data=>{
             console.log(JSON.stringify(data))
             if(data.errors || data.error || data===undefined){

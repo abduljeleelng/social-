@@ -27,15 +27,15 @@ app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressValidator());
-app.get("/",(req,res)=>{
+app.get("/api",(req,res)=>{
     fs.readFile("docs/apiDocs.json",(error,data)=>{
         if(error){return res.status(400).json({error:error})}
         res.json(JSON.parse(data));
     })
 });
-app.use('/',postRouter);
-app.use('/',authRouter);
-app.use('/',userRouter);
+app.use('/api',postRouter);
+app.use('/api',authRouter);
+app.use('/api',userRouter);
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
         res.status(401).json({error:'invalid token...'});

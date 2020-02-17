@@ -12,7 +12,11 @@ exports.createPostValidator =(req,res,next)=>{
     next();
 };
 exports.createUserValidator =(req,res,next)=>{
-    req.check('name',"name is required").notEmpty();
+    req.check('firstName',"name is required").notEmpty();
+    req.check('lastName',"name is required").notEmpty();
+    req.check('country',"name is required").notEmpty();
+    req.check('age',"name is required").notEmpty();
+    req.check('gender',"name is required").notEmpty();
     req.check('email','email required ').notEmpty();
     req.check('email','email must be between 5 to 200 ')
         .matches(/.+\@.+\..+/)

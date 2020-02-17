@@ -4,14 +4,19 @@ const {requireSign} = require('../controllers/auth');
 const {userById} = require('../controllers/user');
 const router = express.Router();
 const {createPostValidator} = require('../validator');
+
+
 router.get('/posts',getPost);
 //router.post('/post',requireSign,createPostValidator,createPost);
 //route for creating new post
 router.post('/post/new/:userId',requireSign,createPost,createPostValidator);
+
+//router.post('/post/new/:userId',createPost,);
+
 router.get('/post/by/:userId',requireSign,postsByUser);
 //update post by post id  route 
-router.put('/post/:postId',updatePost);
-//router.put('/post/:postId',requireSign,isPoster,updatePost);
+//router.put('/post/:postId',updatePost);
+router.put('/post/:postId',requireSign,isPoster,updatePost);
 //delete post by Id
 //router.delete('/post/:postId',requireSign, deletePost);
 router.delete('/post/:postId',requireSign,isPoster, deletePost);

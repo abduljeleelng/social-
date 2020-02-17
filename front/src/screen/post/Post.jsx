@@ -1,9 +1,9 @@
 import React,{Component} from 'react';
-import {Container,Row,Col} from 'reactstrap'
-import { NewPostCard,  ReadPostCard,EmptyPost} from '../../componet/Card';
-import {  ScrollToTop, } from '../../componet/Footer.jsx';
+import {ReadPostCard,EmptyPost} from '../../componet/Card';
+import {ScrollToTop, } from '../../componet/Footer.jsx';
 import {MainHeader, SecondHeader } from '../../componet/Header.jsx';
 import {postList} from "./apiPost";
+import {isAuthenticated} from "../../auth/index";
 import CreatePost from "./CreatePost";
 import { CardProfile, LikeCard, TopNew } from '../../componet/RSideBar';
 import { Notifications, Advert, FriendsZOne } from '../../componet/LSideBar';
@@ -14,6 +14,7 @@ class Post extends Component{
         this.state= {
             post:[],
             page:1,
+            auth:false,
         };
     };
     loadPosts(page){
@@ -26,22 +27,23 @@ class Post extends Component{
     };
 
     componentDidMount(){
+        const token = isAuthenticated().token;
+        if(token !== undefined){
+            this.setState({auth:true});
+        }
         const {page}=this.state;
         this.loadPosts(page);
     };
-
     loadMore = number => {
         this.setState({ page: this.state.page + number });
         this.loadPosts(this.state.page + number);
     };
-
     loadLess = number => {
         this.setState({ page: this.state.page - number });
         this.loadPosts(this.state.page - number);
     };
-
     render(){
-        const {post} = this.state;
+        const {post,auth} = this.state;
         return(
             <>
             <MainHeader />
@@ -52,13 +54,20 @@ class Post extends Component{
       <div className="row">
         <div className="col-lg-3 order-2 order-lg-1">
           <aside className="widget-area">
-              <CardProfile />
-              <LikeCard />
-              <TopNew />
+              {auth ? (
+                  <>
+                    <CardProfile />
+                    <LikeCard />
+                    <TopNew />
+                  </>
+              ):(
+                <TopNew />
+              )}
+            
           </aside>
         </div>
        <div className="col-lg-6 order-1 order-lg-2" >
-           <CreatePost />
+           { auth ? (<CreatePost />):("")}
            {post.length > 0 ? post.map((post,index)=>(
                <ReadPostCard key={index} post={post} />
                 )):<EmptyPost post={post} />}

@@ -17,10 +17,23 @@ exports.getPost =(req, res)=>{
         const posts = Post.find()
             .populate("postedBy","_d name email")
             .select("_id title body created postedBy")
-            .then((posts)=>{res.status(200).json({posts:posts})})
+            .then((posts)=>{res.status(200).json(posts)})
             .catch(err=>console.log(err))
 };
 exports.createPost = (req,res)=>{
+    // post without file uploading
+    const post = new Post(req.body);
+    req.profile.hashed_password = undefined;
+    req.profile.salt = undefined;
+    post.postedBy = req.profile;
+    //post.save().then(result=>{res.status(200).json({post:result})});
+      post.save((err,result)=>{
+           if (err){return res.status(400).json({error:err})}
+           res.status(200).json({post:result})
+       });
+    console.log("Creating new Post",post);
+    console.log("response",req.body);
+    /*** 
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
     form.parse(req,(err,fields, files)=>{
@@ -38,17 +51,7 @@ exports.createPost = (req,res)=>{
             res.status(200).json({result})
         })
     });
-    /** post without file uploading
-    const post = new Post(req.body);
-    post.save().then(result=>{res.status(200).json({post:result})});
-     {/* post.save((err,result)=>{
-           if (err){return res.status(400).json({error:err})}
-           res.status(200).json({post:result})
-       });
-     /}
-    console.log("Creating new Post",post);
-    console.log("response",req.body);
-    ********/
+    ****/
 };
 exports.updatePost =(req,res,next)=>{
     let post = req.post;

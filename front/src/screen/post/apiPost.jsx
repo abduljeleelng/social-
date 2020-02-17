@@ -8,14 +8,15 @@ export const postList = ()=>{
     .catch(error=>{console.log(error)})
 };
 export const newPost = (userId,token,post) =>{
-    return fetch(`${API}/post/new/${userId}`,
+    return fetch(`http://localhost:8080/api/post/new/${userId}`,
+    /*return fetch(`${API}/post/new/${userId}`,*/
     {method:"POST",
     headers:{
         Accept:"application/json",
         "Content-Type":"application/json",
         Authorization:`Bearer ${token}`
     },
-    body:post
+    body:JSON.stringify(post)
 })
 .then(response=>{
     return response.json();
