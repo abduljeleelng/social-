@@ -47,9 +47,6 @@ class CreatePost extends Component{
     this.setState({loading:true});
     const token = isAuthenticated().token;
     const userId = isAuthenticated().user._id
-    const {title,body,photo} = this.state;
-    const post = {title,body,photo};
-    //console.log(JSON.stringify(post));
     newPost(userId,token,this.postData).then(data=>{
       if(data.error){
         console.log(data);
@@ -57,7 +54,7 @@ class CreatePost extends Component{
      }
       else{
         console.log(data);
-        this.setState({loading:false,title:"",body:"",photo:""});
+        this.setState({loading:false,gohome:true,title:"",body:"",photo:""});
       }
     })
   }
@@ -67,7 +64,7 @@ class CreatePost extends Component{
   render(){
       const {title,body,note,error,gohome,reDirect,loading,photo,} = this.state;
       console.log(photo);
-      if(gohome){ return <> data-dismiss="modal" </>};
+      if(gohome){ window.location.reload(false); };
       if(reDirect){ return <Redirect to="/" />};
     return(
       <div className="card card-small">
