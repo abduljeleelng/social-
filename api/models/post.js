@@ -21,7 +21,6 @@ const postSchma = new mongoose.Schema({
         type:ObjectId,
         ref:"User"
     },
-    
     created:{
         type:Date,
         default:Date.now

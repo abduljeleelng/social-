@@ -9,18 +9,35 @@ class CreatePost extends Component{
     this.state = {
       title:"",
       body:"",
+
       note:false,
       error:"",
       gohome:false,
       reDirect:false,
       loading:false,
+      fileSize: 0,
       user:{},
     }
   }
-
-  handleChange=name=>e=>{
-    this.setState({[name]:e.target.value});
+  componentDidMount(){
+    this.postData = new FormData();
+    this.setState({ user: isAuthenticated().user });
+    const userId = isAuthenticated().user._id;
+    if(!userId){
+      this.setState({reDirect:true});
+    }
   }
+
+  handleChange=name=>event=>{
+   // this.setState({[name]:event.target.value});
+   // this.setState({["photo"]:event.target.files[0]});
+    this.setState({ error: "" });
+    const value = name === "photo" ? event.target.files[0] : event.target.value;
+    //const fileSize = name === "photo" ? event.target.files[0].size : 0;
+    this.postData.set(name, value);
+    this.setState({ [name]: value });
+  }
+
   handleCancel=e=>{
     e.preventDefault();
     this.setState({gohome:true});
@@ -30,35 +47,27 @@ class CreatePost extends Component{
     this.setState({loading:true});
     const token = isAuthenticated().token;
     const userId = isAuthenticated().user._id
-    const {title,body} = this.state;
-    const post = {title,body};
-    console.log(JSON.stringify(post));
-    console.log(JSON.stringify(userId));
-    console.log(JSON.stringify(token));
-    newPost(userId,token,post).then(data=>{
-      //if(data.error){console.log(data.error)}else{
-        console.log("data from server");
-        console.log(JSON.stringify(data));
+    const {title,body,photo} = this.state;
+    const post = {title,body,photo};
+    //console.log(JSON.stringify(post));
+    newPost(userId,token,this.postData).then(data=>{
+      if(data.error){
         console.log(data);
         this.setState({loading:false});
-      //}
+     }
+      else{
+        console.log(data);
+        this.setState({loading:false,title:"",body:"",photo:""});
+      }
     })
   }
   handleShareButton=e=>{
     e.preventDefault();
   }
-
-  componentDidMount(){
-    this.setState({ user: isAuthenticated().user });
-    const userId = isAuthenticated().user._id;
-    if(!userId){
-      this.setState({reDirect:true});
-    }
-  }
-
   render(){
-      const {title,body,note,error,gohome,reDirect,loading} = this.state;
-      if(gohome){ return <Redirect to="Posts" />};
+      const {title,body,note,error,gohome,reDirect,loading,photo,} = this.state;
+      console.log(photo);
+      if(gohome){ return <> data-dismiss="modal" </>};
       if(reDirect){ return <Redirect to="/" />};
     return(
       <div className="card card-small">
@@ -93,11 +102,16 @@ class CreatePost extends Component{
                   <div className="modal-body custom-scroll">
                     <input name="share" className="form-control" placeholder="Title of your post" value={title} onChange={this.handleChange("title")} />
                     <br />
-                    <textarea name="share" className="share-field-big custom-scroll" placeholder="Say Something" value={body} onChange={this.handleChange("body")} />
+                    <textarea name="share" className="share-field-big custom-scroll" placeholder="Say Something" value={body} onChange={this.handleChange("body")} /> <br />
+
+                    <input type="file" accept="image/*" name="share" className="form-control" placeholder="Title of your post"  onChange={this.handleChange("photo")} /> <br />
+
+                    <img src={photo} alt={title} />
+
                   </div>
                   <div className="modal-footer">
-    {loading ? ("loading..") : (<button type="button" className="post-share-btn" data-dismiss="modal" onClick={this.handleCancel}>cancel</button>) }
-                    <button type="button" className="post-share-btn" onClick={this.handleCreatePost}>post</button>
+                      <button type="button" className="post-share-btn" data-dismiss="modal">cancel</button>
+                {loading ? ("loading..") : ( <button type="button" className="post-share-btn" onClick={this.handleCreatePost}>post</button>) }
                   </div>
                 </div>
               </div>

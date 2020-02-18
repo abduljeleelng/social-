@@ -20,8 +20,8 @@ exports.getPost =(req, res)=>{
             .then((posts)=>{res.status(200).json(posts)})
             .catch(err=>console.log(err))
 };
-exports.createPost = (req,res)=>{
-    // post without file uploading
+exports.createPost = (req,res,next)=>{
+    /**** * post without file uploading
     const post = new Post(req.body);
     req.profile.hashed_password = undefined;
     req.profile.salt = undefined;
@@ -33,11 +33,14 @@ exports.createPost = (req,res)=>{
        });
     console.log("Creating new Post",post);
     console.log("response",req.body);
-    /*** 
+    ***/
+  
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
     form.parse(req,(err,fields, files)=>{
-        if (err){return res.status(400).json({error:"image can't be uploaded"})}
+        if (err){
+            return res.status(400).json({error:"image can't be uploaded"})
+        }
         let post = new Post(fields);
         req.profile.hashed_password = undefined;
         req.profile.salt = undefined;
@@ -51,7 +54,6 @@ exports.createPost = (req,res)=>{
             res.status(200).json({result})
         })
     });
-    ****/
 };
 exports.updatePost =(req,res,next)=>{
     let post = req.post;

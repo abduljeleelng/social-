@@ -17,7 +17,7 @@ const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 
 mongoose
-    .connect(process.env.MONGO, {useUnifiedTopology:true,useNewUrlParser:true,keepAlive:true,poolSize:30,autoReconnect:true,socketTimeoutMS:360000*3600,connectTimeoutMS:36000*678 })
+    .connect(process.env.MONGO, {useUnifiedTopology:true,useNewUrlParser:true,keepAlive:true,poolSize:30,socketTimeoutMS:360000*3600,connectTimeoutMS:36000*678 })
     .then(() => console.log(`DB Connected on port ${process.env.PORT}`))
     .catch(error=>console.log(error));
 mongoose.connection.on("error", err => {console.log(`DB connection error: ${err.message}`);});
