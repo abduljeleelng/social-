@@ -14,7 +14,7 @@ exports.postById=(req, res, next, id)=>{
         })
 };
 exports.getPost =(req, res)=>{
-        const posts = Post.find()
+        const posts = Post.find().sort( { created: -1 } )
             .populate("postedBy","_d name email")
             .select("_id title body created postedBy")
             .then((posts)=>{res.status(200).json(posts)})
