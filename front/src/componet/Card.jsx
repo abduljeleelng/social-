@@ -2,6 +2,8 @@ import React,{Fragment,Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Card, CardImg, CardText, CardBody, CardTitle,CardFooter, CardLink, CardSubtitle, Button} from 'reactstrap';
 
+
+
 export const NewPostCard = () => {
   ///const {title,body} =this.state;
     return(
@@ -53,7 +55,7 @@ export const NewPostCard = () => {
     )
 }
 
-export const ReadPostCard = ({post}) => {
+export const ReadPostCard = ({post, postImage, imageAlt, noImage}) => {
     return(
 <div className="card">
   {/* post title start */}
@@ -92,8 +94,8 @@ export const ReadPostCard = ({post}) => {
     </p>
     <div className="post-thumb-gallery">
       <figure className="post-thumb img-popup">
-        <a href="assets/images/post/post-large-1.jpg">
-          <img src="assets/images/post/post-1.jpg" alt="post image" />
+        <a href={postImage}>
+          <img src={postImage} alt={imageAlt} onError={i=>i.target.src=`${noImage}`} />
         </a>
       </figure>
     </div>

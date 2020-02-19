@@ -20,6 +20,17 @@ exports.getPost =(req, res)=>{
             .then((posts)=>{res.status(200).json(posts)})
             .catch(err=>console.log(err))
 };
+exports.postPhoto = (req,res,next)=>{
+    res.set("Content-Type", req.post.photo.contentType);
+    return res.send(req.post.photo.data);
+};
+exports.singlePost =(req,res)=>{
+    //return res.json(req.post)
+    const post=Post.findById(req.post)
+    .populate("postedBy","_id name email")
+    .then((post)=>{res.status(200).json(post)})
+    .catch(err=>console.log(err));
+}
 exports.createPost = (req,res,next)=>{
     /**** * post without file uploading
     const post = new Post(req.body);

@@ -22,3 +22,13 @@ export const newPost = (userId,token,post) =>{
 })
 .catch(error=>console.log(error))
 }
+
+export const photoAPI = "http://localhost:8080/api/posts/photo/";
+
+export const SinglePost = (postId)=>{
+    return fetch(`${API}/posts`,{method:"GET"})
+    .then(response=>{
+        return response.json();
+    })
+    .catch(error=>{console.log(error)})
+};

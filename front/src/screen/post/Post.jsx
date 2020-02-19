@@ -2,9 +2,10 @@ import React,{Component} from 'react';
 import {ReadPostCard,EmptyPost} from '../../componet/Card';
 import {ScrollToTop, } from '../../componet/Footer.jsx';
 import {MainHeader, SecondHeader } from '../../componet/Header.jsx';
-import {postList} from "./apiPost";
+import {postList,photoAPI} from "./apiPost";
 import {isAuthenticated} from "../../auth/index";
 import CreatePost from "./CreatePost";
+import DefaultImage from "./defaultImage.jpg";
 import { CardProfile, LikeCard, TopNew } from '../../componet/RSideBar';
 import { Notifications, Advert, FriendsZOne } from '../../componet/LSideBar';
 
@@ -69,8 +70,11 @@ class Post extends Component{
        <div className="col-lg-6 order-1 order-lg-2" >
            { auth ? (<CreatePost />):("")}
            {post.length > 0 ? post.map((post,index)=>(
-               <ReadPostCard key={index} post={post} />
-                )):<EmptyPost post={post} />}
+               //? `http://localhost:8080/api/posts/photo/${post._id}`: DefaultImage
+               //{`${photoAPI}/${post._id}` ? `${photoAPI}/${post._id}`: 'defaultImage.jpg'}
+               <ReadPostCard key={index} post={post} postImage={photoAPI+post._id} noImage={DefaultImage} imageAlt={post.title} />
+                )):<EmptyPost post={post} />
+            }
        </div>
       <div className="col-lg-3 order-3">
                 <aside className="widget-area">
