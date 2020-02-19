@@ -90,9 +90,6 @@ export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost}) =>
   {/* post title start */}
   <div className="post-content">
     <h4>{post.title}</h4>
-    <p className="post-desc">
-      {singlePost ? (post.body):(post.body.substring(0,100))}
-    </p>
     <div className="post-thumb-gallery">
       <figure className="post-thumb img-popup">
         <a href={postImage}>
@@ -100,6 +97,10 @@ export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost}) =>
         </a>
       </figure>
     </div>
+    <p className="post-desc">
+      {singlePost ? (post.body):(post.body.substring(0,100))}
+    </p>
+
     <div className="post-meta">
       <button className="post-meta-like">
         <i className="bi bi-heart-beat" />
