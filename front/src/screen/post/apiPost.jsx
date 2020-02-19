@@ -25,8 +25,8 @@ export const newPost = (userId,token,post) =>{
 
 export const photoAPI = "http://localhost:8080/api/posts/photo/";
 
-export const SinglePost = (postId)=>{
-    return fetch(`${API}/posts${postId}`,{method:"GET"})
+export const singlePost = (postId)=>{
+    return fetch(`${API}/post/${postId}`,{method:"GET"})
     .then(response=>{
         return response.json();
     })

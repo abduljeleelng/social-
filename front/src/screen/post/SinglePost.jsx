@@ -2,50 +2,44 @@ import React,{Component} from 'react';
 import {ReadPostCard,EmptyPost} from '../../componet/Card';
 import {ScrollToTop, } from '../../componet/Footer.jsx';
 import {MainHeader, SecondHeader } from '../../componet/Header.jsx';
-import {postList,photoAPI} from "./apiPost";
+import {singlePost,photoAPI} from "./apiPost";
 import {isAuthenticated} from "../../auth/index";
 import CreatePost from "./CreatePost";
 import DefaultImage from "./defaultImage.jpg";
 import { CardProfile, LikeCard, TopNew } from '../../componet/RSideBar';
 import { Notifications, Advert, FriendsZOne } from '../../componet/LSideBar';
+import { Redirect } from 'react-router-dom';
+
 
 class SinglePost extends Component{
     constructor(props){
         super(props);
         this.state= {
-            post:[],
+            post:"",
             page:1,
             auth:false,
+            redirect:false,
         };
     };
-    loadPosts(page){
-        postList().then(data=>{
-            if(data.undefined || data.error || data.null){
-                alert("server Error");
-            }
-            this.setState({post:data});
-        })
-    };
-
     componentDidMount(){
-        const postid = this.props.match.params.postId;
+        const postId = this.props.match.params.postId;
+        console.log(JSON.stringify(postId))
+        if (!postId){
+            this.setState({redirect:true});
+        }
         const token = isAuthenticated().token;
         if(token !== undefined){
             this.setState({auth:true});
         }
-        const {page}=this.state;
-        this.loadPosts(page);
-    };
-    loadMore = number => {
-        this.setState({ page: this.state.page + number });
-        this.loadPosts(this.state.page + number);
-    };
-    loadLess = number => {
-        this.setState({ page: this.state.page - number });
-        this.loadPosts(this.state.page - number);
+        singlePost(postId).
+        then(data=>{
+           if(data.error){console.log(data.error)}
+            this.setState({post:data});
+        })
     };
     render(){
-        const {post,auth} = this.state;
+        const {post,auth,redirect} = this.state;
+        if(redirect){ return <Redirect to="/Posts" />}
         return(
             <>
             <MainHeader />
@@ -70,12 +64,14 @@ class SinglePost extends Component{
         </div>
        <div className="col-lg-6 order-1 order-lg-2" >
            { auth ? (<CreatePost />):("")}
-           {post.length > 0 ? post.map((post,index)=>(
-               //? `http://localhost:8080/api/posts/photo/${post._id}`: DefaultImage
+         
+               {//? `http://localhost:8080/api/posts/photo/${post._id}`: DefaultImage
                //{`${photoAPI}/${post._id}` ? `${photoAPI}/${post._id}`: 'defaultImage.jpg'}
-               <ReadPostCard key={index} post={post} postImage={photoAPI+post._id} noImage={DefaultImage} imageAlt={post.title} />
-                )):<EmptyPost post={post} />
+               post==="" ? ("loading ...") :(
+                <ReadPostCard post={post} postImage={photoAPI+post._id} noImage={DefaultImage} imageAlt={post.title} singlePost={true} />
+               )
             }
+              
        </div>
       <div className="col-lg-3 order-3">
                 <aside className="widget-area">
