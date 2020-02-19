@@ -4,6 +4,7 @@ import {Card, CardImg, CardText, CardBody, CardTitle,CardFooter, CardLink, CardS
 
 
 
+
 export const NewPostCard = () => {
   ///const {title,body} =this.state;
     return(
@@ -55,7 +56,7 @@ export const NewPostCard = () => {
     )
 }
 
-export const ReadPostCard = ({post, postImage, imageAlt, noImage}) => {
+export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost}) => {
     return(
 <div className="card">
   {/* post title start */}
@@ -90,7 +91,7 @@ export const ReadPostCard = ({post, postImage, imageAlt, noImage}) => {
   <div className="post-content">
     <h4>{post.title}</h4>
     <p className="post-desc">
-      {post.body.substring(0,100)}
+      {singlePost ? (post.body):(post.body.substring(0,100))}
     </p>
     <div className="post-thumb-gallery">
       <figure className="post-thumb img-popup">
