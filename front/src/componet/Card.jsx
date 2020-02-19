@@ -1,6 +1,8 @@
 import React,{Fragment,Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Card, CardImg, CardText, CardBody, CardTitle,CardFooter, CardLink, CardSubtitle, Button} from 'reactstrap';
+import { isAuthenticated } from '../auth';
+import { deletePost } from '../screen/post/apiPost';
 
 
 
@@ -56,7 +58,19 @@ export const NewPostCard = () => {
     )
 }
 
-export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost}) => {
+export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost,auth}) => {
+  const token = isAuthenticated().token;
+  const postId = post._id;
+  console.log(postId);
+  const handledelete=()=>{
+    deletePost(postId,token)
+    .then(data=>{
+      if(data.error){console.log(data)}
+      console.log(data);
+      alert(data.message);
+      window.location.reload("/Posts");
+    })
+  }
     return(
 <div className="card">
   {/* post title start */}
@@ -79,11 +93,13 @@ export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost}) =>
       <span />
       <span />
       <div className="post-settings arrow-shape">
-        <ul>
-          <li><button>Delete</button></li>
-          <li><button>edit post</button></li>
-          <li><button>embed adda</button></li>
-        </ul>
+        {isAuthenticated().user && isAuthenticated().user._id === post.postedBy._id ? (
+                  <ul>
+                  <li><button onClick={handledelete}>Delete</button></li>
+                  <li><button>edit post</button></li>
+                </ul>
+        ):("login")}
+
       </div>
     </div>
   </div>

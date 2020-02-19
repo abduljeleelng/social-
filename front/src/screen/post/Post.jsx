@@ -72,7 +72,7 @@ class Post extends Component{
            {post.length > 0 ? post.map((post,index)=>(
                //? `http://localhost:8080/api/posts/photo/${post._id}`: DefaultImage
                //{`${photoAPI}/${post._id}` ? `${photoAPI}/${post._id}`: 'defaultImage.jpg'}
-               <ReadPostCard key={index} post={post} postImage={photoAPI+post._id} noImage={DefaultImage} imageAlt={post.title} />
+               <ReadPostCard key={index} auth={auth} post={post} postImage={photoAPI+post._id} noImage={DefaultImage} imageAlt={post.title} />
                 )):<EmptyPost post={post} />
             }
        </div>

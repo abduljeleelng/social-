@@ -31,10 +31,14 @@ class SinglePost extends Component{
         if(token !== undefined){
             this.setState({auth:true});
         }
-        singlePost(postId).
-        then(data=>{
-           if(data.error){console.log(data.error)}
-            this.setState({post:data});
+        singlePost(postId)
+        .then(data=>{
+            //console.log(data)
+           if(data.null || data.error || data.undefined){
+               console.log(data)
+            }else{
+                this.setState({post:data})
+            }
         })
     };
     render(){
@@ -67,8 +71,8 @@ class SinglePost extends Component{
          
                {//? `http://localhost:8080/api/posts/photo/${post._id}`: DefaultImage
                //{`${photoAPI}/${post._id}` ? `${photoAPI}/${post._id}`: 'defaultImage.jpg'}
-               post==="" ? ("loading ...") :(
-                <ReadPostCard post={post} postImage={photoAPI+post._id} noImage={DefaultImage} imageAlt={post.title} singlePost={true} />
+               post === "" ? ("loading ...") :(
+                <ReadPostCard post={post} auth={auth} postImage={photoAPI+post._id} noImage={DefaultImage} imageAlt={post.title} singlePost={true} />
                )
             }
               

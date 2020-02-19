@@ -32,3 +32,18 @@ export const singlePost = (postId)=>{
     })
     .catch(error=>{console.log(error)})
 };
+
+export const deletePost = (postId, token)=>{
+    return fetch(`${API}/post/${postId}`,{
+        method:"DELETE",
+        headers:{
+            Accept:"application/json",
+            "Content-type":"application/json",
+            Authorization:`Bearer ${token}`
+        },
+    })
+    .then(response=>{
+        return response.json();
+    })
+    .catch(error=>{console.log(error)})
+};
