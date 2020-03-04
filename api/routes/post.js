@@ -17,7 +17,9 @@ router.post('/post/new/:userId',requireSign,createPost,createPostValidator);
 
 //router.post('/post/new/:userId',createPost,);
 
-router.get('/post/by/:userId',requireSign,postsByUser);
+router.get('/post/by/:userId', postsByUser);
+
+//router.get('/post/by/:userId',requireSign,postsByUser);
 //update post by post id  route 
 //router.put('/post/:postId',updatePost);
 router.put('/post/:postId',requireSign,isPoster,updatePost);

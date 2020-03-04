@@ -17,13 +17,14 @@ export default class Login extends Component {
             error : "",
             loading :false,
             redirecTo:false,
+            user:""
         }
     }
+    
     handleChange = name => e =>{
         this.setState({[name]:e.target.value});
         this.setState({message:'',error:'',redirecTo:false,});
     };
-
 
     handleSignIn=e=>{
         e.preventDefault();
@@ -61,8 +62,9 @@ export default class Login extends Component {
 
 
     render() {
-        const {email,password,loading,error,redirecTo,} = this.state;
-        if(redirecTo){return <Redirect to="Posts" />}
+        const {email,password,loading,error,redirecTo,user} = this.state;
+        //if(redirecTo){return <Redirect to={`/${user._id}`} />}
+        if(redirecTo){return <Redirect to="/posts" />}
         
         return (
             <div className="login-area">

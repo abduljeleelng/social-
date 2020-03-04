@@ -63,7 +63,7 @@ class CreatePost extends Component{
   }
   render(){
       const {title,body,note,error,gohome,reDirect,loading,photo,} = this.state;
-      console.log(photo);
+      //console.log(photo);
       if(gohome){ window.location.reload(false); };
       if(reDirect){ return <Redirect to="/" />};
     return(

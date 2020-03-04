@@ -3,7 +3,6 @@ require('dotenv').config();
 const expressJwt = require('express-jwt');
 const User = require('../models/users');
 
-
 exports.signup = async (req,res)=>{
     const userExist = await  User.findOne({email:req.body.email});
     if (userExist) return res.status(400).json({error:"user already exist"});
@@ -12,6 +11,7 @@ exports.signup = async (req,res)=>{
     await user.save();
     res.status(200).json({messages:'account successfully created'});
 };
+
 exports.signin=(req,res)=>{
     //find the user by mail
     const {_id,email,password}=req.body;
@@ -35,6 +35,7 @@ exports.signin=(req,res)=>{
         return res.status(200).json({token,user:{_id,name,email}})
     })
 };
+
 exports.signout=(req,res)=>{
     res.clearCookie("t");
     return res.json({message:"Sign out successfully"});

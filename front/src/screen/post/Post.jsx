@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {ReadPostCard,EmptyPost} from '../../componet/Card';
 import {ScrollToTop, } from '../../componet/Footer.jsx';
 import {MainHeader, SecondHeader } from '../../componet/Header.jsx';
-import {postList,photoAPI} from "./apiPost";
+import {postList,photoAPI,deletePost} from "./apiPost";
 import {isAuthenticated} from "../../auth/index";
 import CreatePost from "./CreatePost";
 import DefaultImage from "./defaultImage.jpg";
@@ -43,8 +43,21 @@ class Post extends Component{
         this.setState({ page: this.state.page - number });
         this.loadPosts(this.state.page - number);
     };
+   // const token = isAuthenticated().token;
+    //const postId = post._id;
+   // console.log(postId);
+    handledelete=(postId,token)=>{
+      deletePost(postId,token)
+      .then(data=>{
+        if(data.error){console.log(data)}
+        console.log(data);
+        alert(data.message);
+        window.location.reload("/Posts");
+      })
+    }
     render(){
         const {post,auth} = this.state;
+        const token = isAuthenticated().token;
         return(
             <>
             <MainHeader />

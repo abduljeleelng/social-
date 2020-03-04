@@ -33,11 +33,11 @@ class SinglePost extends Component{
         }
         singlePost(postId)
         .then(data=>{
-            //console.log(data)
-           if(data.null || data.error || data.undefined){
-               console.log(data)
+           // console.log(JSON.stringify(data))
+           if(data.error){
+               return console.log(data)
             }else{
-                this.setState({post:data})
+               this.setState({post:data})
             }
         })
     };

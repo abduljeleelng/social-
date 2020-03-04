@@ -1,5 +1,5 @@
 import React,{Fragment,Component} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import {Card, CardImg, CardText, CardBody, CardTitle,CardFooter, CardLink, CardSubtitle, Button} from 'reactstrap';
 import { isAuthenticated } from '../auth';
 import { deletePost } from '../screen/post/apiPost';
@@ -59,33 +59,38 @@ export const NewPostCard = () => {
 }
 
 export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost,auth}) => {
-  const token = isAuthenticated().token;
-  const postId = post._id;
-  console.log(postId);
-  const handledelete=()=>{
+     const token = isAuthenticated().token;
+     const postId = post._id;
+    console.log(postId);
+   const handledelete=()=>{
     deletePost(postId,token)
     .then(data=>{
-      if(data.error){console.log(data)}
+      if(data.error || data===undefined){
+        return console.log("error");
+        console.log(data)
+      }
       console.log(data);
       alert(data.message);
       window.location.reload("/Posts");
+      return <Redirect to="./Posts" />
     })
   }
+
     return(
 <div className="card">
   {/* post title start */}
   <div className="post-title d-flex align-items-center">
     {/* profile picture end */}
     <div className="profile-thumb">
-      <a href="#">
+    <Link to={`/${post.postedBy._id}`}>
         <figure className="profile-thumb-middle">
           <img src="assets/images/profile/profile-small-1.jpg" alt="profile picture" />
         </figure>
-      </a>
+      </Link>
     </div>
     {/* profile picture end */}
     <div className="posted-author">
-      <h6 className="author"><a href="profile.html">{post.postedBy.name ? post.postedBy.name: "Unkmow Poster" }</a></h6>
+      <h6 className="author"><Link to={`/${post.postedBy._id}`}>{post.postedBy.name ? post.postedBy.name: "Unkmow Poster" }</Link></h6>
       <span className="post-time">on {new Date(post.created).toDateString()} </span>
     </div>
     <div className="post-settings-bar">
@@ -98,7 +103,12 @@ export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost,auth
                   <li><button onClick={handledelete}>Delete</button></li>
                   <li><button>edit post</button></li>
                 </ul>
-        ):("login")}
+        ):(
+          <ul>
+          <li> <Link to="/" >Login </Link> </li>
+          <li> <Link to="/" >Sign Up </Link> </li>
+          </ul>
+        )}
 
       </div>
     </div>
@@ -109,12 +119,17 @@ export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost,auth
     <div className="post-thumb-gallery">
       <figure className="post-thumb img-popup">
         <a href={postImage}>
-          <img src={postImage} alt={imageAlt} onError={i=>i.target.src=`${noImage}`} />
+          { singlePost ? 
+          (<img src={postImage} alt={imageAlt} onError={i=>i.target.src=`${noImage}`}   />) : 
+          (<img src={postImage} alt={imageAlt} onError={i=>i.target.src=`${noImage}`} width={510} height={270} />)
+          }
+          
         </a>
       </figure>
     </div>
     <p className="post-desc">
-      {singlePost ? (post.body):(post.body.substring(0,100))}
+      {singlePost ? (post.body): <> {post.body.substring(0,100)}<Link to={`/post/${post._id}`}> Read more ..</Link> </> }
+      
     </p>
 
     <div className="post-meta">
