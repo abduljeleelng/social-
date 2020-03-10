@@ -9,7 +9,6 @@ class CreatePost extends Component{
     this.state = {
       title:"",
       body:"",
-
       note:false,
       error:"",
       gohome:false,
@@ -63,6 +62,7 @@ class CreatePost extends Component{
   }
   render(){
       const {title,body,note,error,gohome,reDirect,loading,photo,} = this.state;
+      const {profileImage,noProfileImage} = this.props;
       //console.log(photo);
       if(gohome){ window.location.reload(false); };
       if(reDirect){ return <Redirect to="/" />};
@@ -73,7 +73,7 @@ class CreatePost extends Component{
             <div className="profile-thumb">
               <a href="#">
                 <figure className="profile-thumb-middle">
-                  <img src="assets/images/profile/profile-small-37.jpg" alt="profile picture" />
+                  <img src={profileImage ? profileImage:noProfileImage} onError={noProfileImage} alt="profile picture" />
                 </figure>
               </a>
             </div>

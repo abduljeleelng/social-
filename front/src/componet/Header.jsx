@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-export const MainHeader = () => {
+export const MainHeader = ({userId}) => {
     return(
         <header>
   <div className="header-top sticky bg-white d-none d-lg-block">
@@ -11,7 +11,8 @@ export const MainHeader = () => {
           <div className="header-top-navigation">
             <nav>
               <ul>
-                <li className="active"><a href="index.html">home</a></li>
+                <li className="active"><Link to="/posts">Home</Link></li>
+                <li ><Link to={`/${userId}`}>Profile</Link></li>
                 <li className="msg-trigger"><a className="msg-trigger-btn" href="#a">message</a>
                   <div className="message-dropdown" id="a">
                     <div className="dropdown-title">
@@ -176,8 +177,8 @@ export const MainHeader = () => {
         <div className="col-md-2">
           {/* brand logo start */}
           <div className="brand-logo text-center">
-            <a href="index.html">
-              <img src="assets/images/logo/logo.png" alt="brand logo" />
+            <a href="/posts">
+              <img src="" alt="I am Catholics" />
             </a>
           </div>
           {/* brand logo end */}
@@ -234,9 +235,9 @@ export const SecondHeader = () =>{
   <div className="mobile-header-wrapper sticky d-block d-lg-none">
     <div className="mobile-header position-relative ">
       <div className="mobile-logo">
-        <a href="index.html">
+        <Link to="/posts">
           <img src="assets/images/logo/logo-white.png" alt="logo" />
-        </a>
+        </Link>
       </div>
       <div className="mobile-menu w-100">
         <ul>
@@ -408,15 +409,5 @@ export const SecondHeader = () =>{
     </div>
   </div>
 </header>
-    )
-}
-export const ProfileHeader = ()=>{
-    return(
-        <h2>Profile Header</h2>
-    )
-}
-export const FollowHeader = ()=>{
-    return(
-        <h2>Follow Headers </h2>
     )
 }

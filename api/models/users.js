@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const uuidv1 = require('uuid/v1');
 const crypto = require('crypto');
+const { ObjectId } = mongoose.Schema;
 
 const userSchma = new mongoose.Schema({
     firstName:{
@@ -43,6 +44,24 @@ const userSchma = new mongoose.Schema({
         default:Date.now,
     },
     updated:Date,
+    photo: {
+        data: Buffer,
+        contentType: String
+    },
+    about: {
+        type: String,
+        trim: true
+    },
+    following: [{ type: ObjectId, ref: "User" }],
+    followers: [{ type: ObjectId, ref: "User" }],
+    resetPasswordLink: {
+        data: String,
+        default: ""
+    },
+    role: {
+        type: String,
+        default: "subscriber"
+    }
 });
 
 ///generating Virtual Password and Salt it

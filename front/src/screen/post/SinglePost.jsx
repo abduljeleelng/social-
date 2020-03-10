@@ -6,6 +6,8 @@ import {singlePost,photoAPI} from "./apiPost";
 import {isAuthenticated} from "../../auth/index";
 import CreatePost from "./CreatePost";
 import DefaultImage from "./defaultImage.jpg";
+import NoCover from "../users/images/mountains.jpg";
+import NoProfile from "../users/images/avatar.jpg";
 import { CardProfile, LikeCard, TopNew } from '../../componet/RSideBar';
 import { Notifications, Advert, FriendsZOne } from '../../componet/LSideBar';
 import { Redirect } from 'react-router-dom';
@@ -27,13 +29,11 @@ class SinglePost extends Component{
         if (!postId){
             this.setState({redirect:true});
         }
-        const token = isAuthenticated().token;
-        if(token !== undefined){
+        if(isAuthenticated()){
             this.setState({auth:true});
         }
         singlePost(postId)
         .then(data=>{
-           // console.log(JSON.stringify(data))
            if(data.error){
                return console.log(data)
             }else{
@@ -43,7 +43,7 @@ class SinglePost extends Component{
     };
     render(){
         const {post,auth,redirect} = this.state;
-        if(redirect){ return <Redirect to="/Posts" />}
+        if(redirect){ return <Redirect to="/posts" />}
         return(
             <>
             <MainHeader />
@@ -56,32 +56,41 @@ class SinglePost extends Component{
           <aside className="widget-area">
               {auth ? (
                   <>
-                    <CardProfile />
+                  
+                    {/*<CardProfile />
                     <LikeCard />
-                    <TopNew />
+                    <TopNew />*/}
                   </>
-              ):(
-                <TopNew />
+              ):( 
+              ""
               )}
             
           </aside>
         </div>
        <div className="col-lg-6 order-1 order-lg-2" >
-           { auth ? (<CreatePost />):("")}
-         
-               {//? `http://localhost:8080/api/posts/photo/${post._id}`: DefaultImage
-               //{`${photoAPI}/${post._id}` ? `${photoAPI}/${post._id}`: 'defaultImage.jpg'}
+           { auth ? (<CreatePost profileImage="" noProfileImage={NoProfile} />):("")}
+            {
                post === "" ? ("loading ...") :(
-                <ReadPostCard post={post} auth={auth} postImage={photoAPI+post._id} noImage={DefaultImage} imageAlt={post.title} singlePost={true} />
+                <ReadPostCard 
+                post={post} 
+                auth={auth}
+                postImage={photoAPI+post._id} 
+                noImage={DefaultImage} 
+                imageAlt={post.title} 
+                singlePost={true} 
+                imageAlt={post.title} 
+                profilePhoto="" 
+                noProfilePhoto={NoProfile} 
+                />
                )
             }
               
        </div>
       <div className="col-lg-3 order-3">
                 <aside className="widget-area">
-                    <Notifications />
+                   {/* <Notifications />
                     <Advert />
-                    <FriendsZOne />
+                   <FriendsZOne />*/}
                 </aside>
        </div>
       </div>

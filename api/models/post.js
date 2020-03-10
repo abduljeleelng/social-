@@ -1,7 +1,36 @@
 const mongoose = require('mongoose');
 const {ObjectId}= mongoose.Schema;
 const postSchma = new mongoose.Schema({
-    title:{
+    title: {
+        type: String,
+        required: true
+    },
+    body: {
+        type: String,
+        required: true
+    },
+    photo: {
+        data: Buffer,
+        contenType: String
+    },
+    postedBy: {
+        type: ObjectId,
+        ref: "User"
+    },
+    created: {
+        type: Date,
+        default: Date.now
+    },
+    updated: Date,
+    likes: [{ type: ObjectId, ref: "User" }],
+    comments: [
+        {
+            text: String,
+            created: { type: Date, default: Date.now },
+            postedBy: { type: ObjectId, ref: "User" }
+        }
+    ]
+   /* title:{
         type:String,
         require:true,
         minlength:4,
@@ -25,6 +54,7 @@ const postSchma = new mongoose.Schema({
         type:Date,
         default:Date.now
     }
+    */
 });
 
 module.exports=mongoose.model("Post",postSchma);

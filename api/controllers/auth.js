@@ -14,7 +14,7 @@ exports.signup = async (req,res)=>{
 
 exports.signin=(req,res)=>{
     //find the user by mail
-    const {_id,email,password}=req.body;
+    const {email,password}=req.body;
     User.findOne({email},(err,user)=>{
         if (err || !user){
             return res.status(401).json({error:"email doesn't exist, please SignUp"})
@@ -40,6 +40,7 @@ exports.signout=(req,res)=>{
     res.clearCookie("t");
     return res.json({message:"Sign out successfully"});
 };
+
 exports.requireSign = expressJwt({
     secret: process.env.JWT_SECRET,
     userProperty: "auth"

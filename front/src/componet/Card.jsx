@@ -58,8 +58,8 @@ export const NewPostCard = () => {
     )
 }
 
-export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost,auth}) => {
-     const token = isAuthenticated().token;
+export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost,auth,profilePhoto,noProfilePhoto, handledelete, like, likes,comment}) => {
+    /* const token = isAuthenticated().token;
      const postId = post._id;
     console.log(postId);
    const handledelete=()=>{
@@ -75,7 +75,7 @@ export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost,auth
       return <Redirect to="./Posts" />
     })
   }
-
+*/
     return(
 <div className="card">
   {/* post title start */}
@@ -84,15 +84,16 @@ export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost,auth
     <div className="profile-thumb">
     <Link to={`/${post.postedBy._id}`}>
         <figure className="profile-thumb-middle">
-          <img src="assets/images/profile/profile-small-1.jpg" alt="profile picture" />
+          <img src={profilePhoto} onError={i=>i.target.src=`${noProfilePhoto}`} alt="profile picture" />
         </figure>
       </Link>
     </div>
     {/* profile picture end */}
     <div className="posted-author">
-      <h6 className="author"><Link to={`/${post.postedBy._id}`}>{post.postedBy.name ? post.postedBy.name: "Unkmow Poster" }</Link></h6>
+      <h6 className="author"><Link to={`/${post.postedBy._id}`}>{post.postedBy.firstName ? post.postedBy.firstName + post.postedBy.lastName : "Unkmow Poster" }</Link></h6>
       <span className="post-time">on {new Date(post.created).toDateString()} </span>
     </div>
+    {singlePost ? (
     <div className="post-settings-bar">
       <span />
       <span />
@@ -100,7 +101,7 @@ export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost,auth
       <div className="post-settings arrow-shape">
         {isAuthenticated().user && isAuthenticated().user._id === post.postedBy._id ? (
                   <ul>
-                  <li><button onClick={handledelete}>Delete</button></li>
+                  <li><button onClick={handledelete}> Delete</button></li>
                   <li><button>edit post</button></li>
                 </ul>
         ):(
@@ -111,7 +112,7 @@ export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost,auth
         )}
 
       </div>
-    </div>
+    </div>):"" }
   </div>
   {/* post title start */}
   <div className="post-content">
@@ -135,22 +136,24 @@ export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost,auth
     <div className="post-meta">
       <button className="post-meta-like">
         <i className="bi bi-heart-beat" />
-        <span>You and 201 people like this</span>
+        <span>{post.likes.length} people like this</span>
         <strong>201</strong>
       </button>
       <ul className="comment-share-meta">
         <li>
+          <Link to={`/post/${post._id}`} >
           <button className="post-comment">
             <i className="bi bi-chat-bubble" />
-            <span>41</span>
+            <span>{post.comments.length > 0 ? post.comments.length : 0}</span>
           </button>
-        </li>
-        <li>
+          </Link>
+        </li> 
+        {/*<li>
           <button className="post-share">
             <i className="bi bi-share" />
             <span>07</span>
           </button>
-        </li>
+        </li>*/}
       </ul>
     </div>
   </div>
