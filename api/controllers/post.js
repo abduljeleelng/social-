@@ -4,7 +4,9 @@ const fs = require('fs');
 const _ = require('lodash');
 exports.postById=(req, res, next, id)=>{
     Post.findById(id)
-        .populate("PostById","_id name")
+        .populate("PostById","_id firstName lastName email ")
+        //.populate("comments.postedBy", "_id firstName lastName email ")
+        //.select("_id title body created likes")
         .exec((err, post)=>{
             if (err || !post){
                 return res.status(400).json({error:err})
@@ -15,21 +17,33 @@ exports.postById=(req, res, next, id)=>{
 };
 exports.getPost =(req, res)=>{
         const posts = Post.find().sort( { created: -1 } )
-            .populate("postedBy","_d firstName lastName email")
+            .populate("postedBy","_id firstName lastName email")
             .select("_id title body created postedBy comments likes")
             .then((posts)=>{res.status(200).json(posts)})
             .catch(err=>console.log(err))
 };
+
 exports.postPhoto = (req,res,next)=>{
     res.set("Content-Type", req.post.photo.contentType);
     return res.send(req.post.photo.data);
 };
+
 exports.singlePost =(req,res)=>{
     const post=Post.findById(req.post)
-    .populate("postedBy","_id name email")
+    .sort( { created: -1 } )
+    .populate("postedBy","_id firstName lastName email")
+    .populate("comments.postedBy", "_id created firstName lastName email ")
+    .select("_id postedBy title body created likes comments")
     .then((post)=>{res.status(200).json(post)})
     .catch(error=>console.log(error));
 }
+
+
+
+exports.singlePostA = (req, res) => {
+   return res.json(req.post);
+};
+
 exports.createPost = (req,res,next)=>{
     /**** * post without file uploading
     const post = new Post(req.body);
@@ -78,7 +92,7 @@ exports.updatePost =(req,res,next)=>{
 }
 exports.postsByUser=(req,res)=>{
     Post.find({postedBy:req.profile._id})
-        .populate("postedBy","_id name")
+        .populate("postedBy","_id firstName lastName")
         .sort({created:-1})
         .exec((err,posts)=>{
             if (err){return res.status(400).json({err})}
@@ -136,14 +150,14 @@ exports.unlike = (req, res) => {
 exports.comment = (req, res) => {
     let comment = req.body.comment;
     comment.postedBy = req.body.userId;
-
+    //comment.postedBy = req.post;
     Post.findByIdAndUpdate(
         req.body.postId,
         { $push: { comments: comment } },
         { new: true }
     )
-        .populate("comments.postedBy", "_id firstName lastName")
-        .populate("postedBy", "_id firstName lastName")
+        .populate("comments.postedBy", "_id firstName lastName email ")
+        .populate("postedBy", "_id firstName lastName email ")
         .exec((err, result) => {
             if (err) {
                 return res.status(400).json({
@@ -157,14 +171,13 @@ exports.comment = (req, res) => {
 
 exports.uncomment = (req, res) => {
     let comment = req.body.comment;
-
     Post.findByIdAndUpdate(
         req.body.postId,
         { $pull: { comments: { _id: comment._id } } },
         { new: true }
     )
-        .populate("comments.postedBy", "_id firstName")
-        .populate("postedBy", "_id lastName")
+        .populate("comments.postedBy", "_id firstName firstName")
+        .populate("postedBy", "_id firstName lastName")
         .exec((err, result) => {
             if (err) {
                 return res.status(400).json({

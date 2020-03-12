@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 
-export default class commentList extends Component {
+export default class CommentList extends Component {
+
     render() {
+      const {profilePhoto,noProfilePhoto, postId} = this.props;
+      //console.log(noProfilePhoto);
         return (
             <div className="card">
             {/* post title start */}

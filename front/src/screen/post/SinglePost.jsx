@@ -4,13 +4,16 @@ import {ScrollToTop, } from '../../componet/Footer.jsx';
 import {MainHeader, SecondHeader } from '../../componet/Header.jsx';
 import {singlePost,photoAPI} from "./apiPost";
 import {isAuthenticated} from "../../auth/index";
-import CreatePost from "./CreatePost";
+//import CreatePost from "./CreatePost";
 import DefaultImage from "./defaultImage.jpg";
-import NoCover from "../users/images/mountains.jpg";
 import NoProfile from "../users/images/avatar.jpg";
-import { CardProfile, LikeCard, TopNew } from '../../componet/RSideBar';
-import { Notifications, Advert, FriendsZOne } from '../../componet/LSideBar';
-import { Redirect } from 'react-router-dom';
+//import { CardProfile, LikeCard, TopNew } from '../../componet/RSideBar';
+//import { Notifications, Advert, FriendsZOne } from '../../componet/LSideBar';
+import { Redirect,Link } from 'react-router-dom';
+import Comment from './Comment';
+import {CommentList} from './component'
+import {comment,uncomment} from './apiPost';
+//import CommentList from './CommentList';
 
 
 class SinglePost extends Component{
@@ -21,7 +24,41 @@ class SinglePost extends Component{
             page:1,
             auth:false,
             redirect:false,
+            comments :
+            [
+                {"id":1, "name":"Ola","message":"Olayemi olanike",time:Date.now()},
+                {"id":1, "name":"Ola","message":"Olayemi olanike",time:Date.now()},
+                {"id":1, "name":"Ola","message":"Olayemi olanike",time:Date.now()},
+                {"id":1, "name":"Ola","message":"Olayemi olanike",time:Date.now()},
+                {"id":1, "name":"Ola","message":"Olayemi olanike",time:Date.now()},
+                {"id":1, "name":"Ola","message":"Olayemi olanike",time:Date.now()}
+           ], 
+            comment:[]
         };
+    };
+    deleteComment = comment => {
+        const userId = isAuthenticated().user._id;
+        const token = isAuthenticated().token;
+        //const postId = this.props.postId;
+        const postId = this.props.match.params.postId;
+
+        uncomment(userId, token, postId, comment).then(data => {
+            if (data.error) {
+                console.log(data.error);
+            } else {
+               // this.props.updateComments(data.comments);
+               window.location.reload();
+            }
+        });
+    };
+
+    deleteConfirmed = comment => {
+        let answer = window.confirm(
+            "Are you sure you want to delete your comment?"
+        );
+        if (answer) {
+            this.deleteComment(comment);
+        }
     };
     componentDidMount(){
         const postId = this.props.match.params.postId;
@@ -37,12 +74,12 @@ class SinglePost extends Component{
            if(data.error){
                return console.log(data)
             }else{
-               this.setState({post:data})
+               this.setState({post:data, comment:data.comments})
             }
         })
     };
     render(){
-        const {post,auth,redirect} = this.state;
+        const {post,auth,redirect,comment} = this.state;
         if(redirect){ return <Redirect to="/posts" />}
         return(
             <>
@@ -68,7 +105,7 @@ class SinglePost extends Component{
           </aside>
         </div>
        <div className="col-lg-6 order-1 order-lg-2" >
-           { auth ? (<CreatePost profileImage="" noProfileImage={NoProfile} />):("")}
+           {/* auth ? (<CreatePost profileImage="" noProfileImage={NoProfile} />):("")*/}
             {
                post === "" ? ("loading ...") :(
                 <ReadPostCard 
@@ -84,7 +121,26 @@ class SinglePost extends Component{
                 />
                )
             }
-              
+            {isAuthenticated() ? (
+                            <Comment 
+                            postId={this.props.match.params.postId}
+                            />
+
+            ):(<div className="card card-small"> Login to post comment  <Link to="/" >Login here</Link></div>)}
+            <br />
+
+            {comment.length > 0 ? comment.map((comment,i)=>{
+
+                return(
+                 <CommentList 
+                 comment={comment} key={i} profilePhoto="" noProfilePhoto={NoProfile}
+                 handleDelete={()=>this.deleteConfirmed(comment)}
+                 />
+                 )
+                }) : <div className="card card-small">No Comment on this post</div>
+            }    
+        
+           {/* <CommentList />*/}
        </div>
       <div className="col-lg-3 order-3">
                 <aside className="widget-area">
@@ -129,4 +185,5 @@ class SinglePost extends Component{
         )
     }
 }
+//import { Form } from 'reactstrap';
 export default SinglePost;

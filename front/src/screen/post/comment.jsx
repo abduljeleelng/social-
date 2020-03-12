@@ -1,55 +1,98 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom';
+import { isAuthenticated } from '../../auth';
+import {comment,uncomment} from './apiPost';
+import NoProfile from "../users/images/avatar.jpg";
 
-export default class comment extends Component {
+
+export default class Comment extends Component {
+    state={
+      text:"",
+      userId:"",
+      token:"",
+      loading:false,
+    }
+    handleChange=text=>e=>{
+      this.setState({[text]:e.target.value});
+    }
+    handleSubmit=e=>{
+      e.preventDefault();
+      this.setState({loading:true})
+      const {text,userId,token}=this.state;
+      const {postId}=this.props;
+      //const comments = {text,userId,token,postId}
+      if(!text){
+        this.setState({ loading:false});
+        return alert("don't post empty comment")
+      }
+      comment(userId, token, postId, {text,userId,token,postId} ).then(
+        data => {
+            if (data.error) {
+                console.log(data.error);
+            } else {
+              alert("comment successful")
+                this.setState({ text: "", loading:false});
+                window.location.reload();
+                //State({});
+                // dispatch fresh list of coments to parent (SinglePost)
+                //this.props.updateComments(data.comments);
+            }
+        }
+      );
+    }
+    deleteComment = comment => {
+      const userId = isAuthenticated().user._id;
+      const token = isAuthenticated().token;
+      const postId = this.props.postId;
+      uncomment(userId, token, postId, comment).then(data => {
+          if (data.error) {
+              console.log(data.error);
+          } else {
+              this.props.updateComments(data.comments);
+          }
+      });
+    };
+
+  deleteConfirmed = comment => {
+      let answer = window.confirm(
+          "Are you sure you want to delete your comment?"
+      );
+      if (answer) {
+          this.deleteComment(comment);
+      }
+  };
+    componentWillMount(){
+      this.setState({token:isAuthenticated().token,userId:isAuthenticated().user._id})
+    }
     render() {
+        const {profileImage,noProfileImage} = this.props;
+        const {text,loading}=this.state;
         return (
             <div className="card card-small">
             <div className="share-box-inner">
-              {/* profile picture end */}
               <div className="profile-thumb">
-                <a href="#">
+                <Link to={`/${isAuthenticated().user._id}`}>
                   <figure className="profile-thumb-middle">
-                    <img src={profileImage ? profileImage:noProfileImage} onError={noProfileImage} alt="profile picture" />
+                    <img 
+                    src={
+                      NoProfile ? 
+                      (NoProfile):(noProfileImage)
+                    } 
+                      onError={noProfileImage} alt=""
+                    />
                   </figure>
-                </a>
+                </Link>
               </div>
-              {/* profile picture end */}
-              {/* share content box start */}
               <div className="share-content-box w-100">
                 <form className="share-text-box">
-                  <textarea name="share" className="share-text-field" aria-disabled="true" placeholder="Say Something" data-toggle="modal" data-target="#textbox" id="email" defaultValue={""} />
-                  <button className="btn-share" type="submit" onClick={this.handleShareButton} >share</button>
+                  <label>Comments : </label>
+                  <textarea value={text} onChange={this.handleChange("text")} className="share-text-field" aria-disabled="true" placeholder="Comment on this Post" />
+                  {loading ? 
+                    (<p className="btn-share" > loading ...</p>):
+                    (<button className="btn-share" type="submit" onClick={this.handleSubmit} > Comment ...</button>)
+                  }
                 </form>
               </div>
-              {/* share content box end */}
-              {/* Modal start */}
-              <div className="modal fade" id="textbox" aria-labelledby="textbox">
-                <div className="modal-dialog">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h5 className="modal-title">Share Your Mood</h5>
-                      <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                      </button>
-                    </div>
-                    <div className="modal-body custom-scroll">
-                      <input name="share" className="form-control" placeholder="Title of your post" value={title} onChange={this.handleChange("title")} />
-                      <br />
-                      <textarea name="share" className="share-field-big custom-scroll" placeholder="Say Something" value={body} onChange={this.handleChange("body")} /> <br />
-  
-                      <input type="file" accept="image/*" name="share" className="form-control" placeholder="Title of your post"  onChange={this.handleChange("photo")} /> <br />
-  
-                      <img src={photo} alt={title} />
-  
-                    </div>
-                    <div className="modal-footer">
-                        <button type="button" className="post-share-btn" data-dismiss="modal">cancel</button>
-                  {loading ? ("loading..") : ( <button type="button" className="post-share-btn" onClick={this.handleCreatePost}>post</button>) }
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* Modal end */}
             </div>
           </div>
         )
