@@ -45,7 +45,7 @@ body{
   }
 
   .bg-img{
-    background: url("images/connection.png");
+    background: url("images/connected.png");
     background-position: center;
     background-size: cover;
     /*padding-top: 10rem;

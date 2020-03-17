@@ -12,7 +12,7 @@ import NoProfile from "../users/images/avatar.jpg";
 import { Redirect,Link } from 'react-router-dom';
 import Comment from './Comment';
 import {CommentList} from './component'
-import {comment,uncomment} from './apiPost';
+import {comment,uncomment,like,unlike} from './apiPost';
 //import CommentList from './CommentList';
 
 
@@ -33,7 +33,9 @@ class SinglePost extends Component{
                 {"id":1, "name":"Ola","message":"Olayemi olanike",time:Date.now()},
                 {"id":1, "name":"Ola","message":"Olayemi olanike",time:Date.now()}
            ], 
-            comment:[]
+            comment:[],
+            like:true,
+            likes:0,
         };
     };
     deleteComment = comment => {
@@ -41,7 +43,6 @@ class SinglePost extends Component{
         const token = isAuthenticated().token;
         //const postId = this.props.postId;
         const postId = this.props.match.params.postId;
-
         uncomment(userId, token, postId, comment).then(data => {
             if (data.error) {
                 console.log(data.error);
@@ -51,7 +52,6 @@ class SinglePost extends Component{
             }
         });
     };
-
     deleteConfirmed = comment => {
         let answer = window.confirm(
             "Are you sure you want to delete your comment?"
@@ -59,6 +59,34 @@ class SinglePost extends Component{
         if (answer) {
             this.deleteComment(comment);
         }
+    };
+
+    checkLike = likes => {
+        const userId = isAuthenticated() && isAuthenticated().user._id;
+        let match = likes.indexOf(userId) !== -1;
+        return match;
+    };
+
+    likeToggle = () => {
+        if (!isAuthenticated()) {
+            this.setState({ redirectToSignin: true });
+            return false;
+        }
+        let callApi = this.state.like ? unlike : like;
+        const userId = isAuthenticated().user._id;
+        const postId = this.state.post._id;
+        const token = isAuthenticated().token;
+
+        callApi(userId, token, postId).then(data => {
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                this.setState({
+                    like: !this.state.like,
+                    likes: data.likes.length
+                });
+            }
+        });
     };
     componentDidMount(){
         const postId = this.props.match.params.postId;
@@ -74,12 +102,17 @@ class SinglePost extends Component{
            if(data.error){
                return console.log(data)
             }else{
-               this.setState({post:data, comment:data.comments})
+               this.setState({
+                   post:data, 
+                   comment:data.comments, 
+                   likes: data.likes.length,
+                   like: this.checkLike(data.likes),
+                })
             }
         })
     };
     render(){
-        const {post,auth,redirect,comment} = this.state;
+        const {post,auth,redirect,comment,like,likes} = this.state;
         if(redirect){ return <Redirect to="/posts" />}
         return(
             <>
@@ -118,6 +151,9 @@ class SinglePost extends Component{
                 imageAlt={post.title} 
                 profilePhoto="" 
                 noProfilePhoto={NoProfile} 
+                likeToggle={this.likeToggle}
+                like={like}
+                likes={likes}
                 />
                )
             }

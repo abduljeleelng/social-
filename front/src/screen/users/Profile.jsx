@@ -27,7 +27,7 @@ export default class Profile extends Component {
     if(isAuthenticated()){
       const {_id} = isAuthenticated().user;
       console.log("user Id "+_id);
-      this.setState({auth:true,userId:_id});
+      this.setState({auth:true,userId:userId});
     }else if(userId){
       this.setState({userId:userId});
     }else{
@@ -50,8 +50,8 @@ export default class Profile extends Component {
   }
   
   componentDidMount(){
-   // const userId = this.props.match.params.userId;
-    const {userId} = this.setState;
+    const userId = this.props.match.params.userId;
+    //const {userId} = this.setState;
     this.login();
     this.loadPost(userId);
     userList().then(data=>{

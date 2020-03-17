@@ -17,7 +17,7 @@ const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 
 mongoose
-    .connect(process.env.MONGO, {useUnifiedTopology:true,useNewUrlParser:true,keepAlive:true,poolSize:30,socketTimeoutMS:360000*3600,connectTimeoutMS:36000*678 })
+    .connect(process.env.MONGODB_URI, {useUnifiedTopology:true,useNewUrlParser:true,keepAlive:true,poolSize:30,socketTimeoutMS:360000*3600,connectTimeoutMS:36000*678 })
     .then(() => console.log(`DB Connected on port ${process.env.PORT}`))
     .catch(error=>console.log(error));
 mongoose.connection.on("error", err => {console.log(`DB connection error: ${err.message}`);});
@@ -28,10 +28,14 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressValidator());
 app.get("/api",(req,res)=>{
+   // res.status(200).json({message:"api now working"})
+
+
     fs.readFile("docs/apiDocs.json",(error,data)=>{
         if(error){return res.status(400).json({error:error})}
         res.json(JSON.parse(data));
     })
+    
 });
 app.use('/api',postRouter);
 app.use('/api',authRouter);

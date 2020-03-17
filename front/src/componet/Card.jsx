@@ -58,7 +58,10 @@ export const NewPostCard = () => {
     )
 }
 
-export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost,auth,profilePhoto,noProfilePhoto, handledelete, like, likes,comment}) => {
+export const ReadPostCard = ({
+  likeToggle,
+  post, postImage, imageAlt, noImage,singlePost,auth,profilePhoto,noProfilePhoto,
+   handledelete, like, likes,comment}) => {
     /* const token = isAuthenticated().token;
      const postId = post._id;
     console.log(postId);
@@ -75,9 +78,9 @@ export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost,auth
       return <Redirect to="./Posts" />
     })
   }
-*/
-    return(
-<div className="card">
+ */
+ return(
+ <div className="card">
   {/* post title start */}
   <div className="post-title d-flex align-items-center">
     {/* profile picture end */}
@@ -134,11 +137,20 @@ export const ReadPostCard = ({post, postImage, imageAlt, noImage,singlePost,auth
     </p>
 
     <div className="post-meta">
-      <button className="post-meta-like">
-        <i className="bi bi-heart-beat" />
-        <span>{post.likes.length} people like this</span>
-        <strong>201</strong>
-      </button>
+
+    {like ? (
+                  <button className="post-meta-like" onClick={likeToggle}>
+                  <i className="bi bi-heart-beat " />
+                  <span>you and {post.likes.length -1} people like this</span>
+                  <strong>201</strong>
+                </button>
+                ) : (
+                  <button className="post-meta-like" onClick={likeToggle}>
+                  <i className="bi bi-heart-beat " />
+                  <span>like, others {post.likes.length} people like this</span>
+                  <strong>201</strong>
+                </button>
+                )}
       <ul className="comment-share-meta">
         <li>
           <Link to={`/post/${post._id}`} >

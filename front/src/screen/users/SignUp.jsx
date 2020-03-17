@@ -5,6 +5,7 @@ import SweetAlert from 'sweetalert2-react'
 import Login from '../../componet/users/Login';
 
 import {signup } from '../../auth';
+import logo from "../../images/logo.png";
 
 
 function validateEmail(email) {
@@ -74,11 +75,11 @@ export default class SignUp extends Component {
               <div className="timeline-logo-area d-flex align-items-center">
                 <div className="timeline-logo">
                   <a href="/">
-                    <img src="assets/images/logo/logo.png" alt="timeline logo" />
+                    <img src={logo} alt="timeline logo" />
                   </a>
                 </div>
                 <div className="timeline-tagline">
-                  <h6 className="tagline">It’s helps you to connect and share with the people in your life</h6>
+                  <h6 className="tagline">It’s helps you to connect and share with the people in faith </h6>
                 </div>
               </div>
             </div>
@@ -94,7 +95,7 @@ export default class SignUp extends Component {
           <div className="row no-gutters">
             <div className="col-lg-6 order-2 order-lg-1">
               <div className="timeline-bg-content bg-img" data-bg="../../assets/images/timeline/adda-timeline.jpg">
-                <h3 className="timeline-bg-title">Let’s see what’s happening to you and your world. Welcome I am a Catholic.</h3>
+                <h3 className="timeline-bg-title">.</h3>
               </div>
             </div>
             <div className="col-lg-6 order-1 order-lg-2 d-flex align-items-center justify-content-center">
