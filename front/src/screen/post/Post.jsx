@@ -62,8 +62,8 @@ class Post extends Component{
         const token = isAuthenticated().token;
         return(
             <>
-            <MainHeader />
-            <SecondHeader />
+            <MainHeader noProfilePhoto={NoProfile} profilePhoto="" />
+            <SecondHeader noProfilePhoto={NoProfile} profilePhoto="" />
 <main>
   <div className="main-wrapper pt-80">
     <div className="container">

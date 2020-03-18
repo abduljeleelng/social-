@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { Redirect} from 'react-router-dom';
 import SweetAlert from 'sweetalert2-react'
-
 import Login from '../../componet/users/Login';
-
 import {signup } from '../../auth';
-import logo from "../../images/logo.png";
-
+import logo from "../../images/cathh.png";
+import {Input} from 'reactstrap'
 
 function validateEmail(email) {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -42,9 +40,8 @@ export default class SignUp extends Component {
         this.setState({loading:true});
         const {email,password,firstName,lastName,gender,age,country}=this.state;
         const user = {email,password,firstName,lastName,gender,age,country};
-        //console.log(JSON.stringify(user));
+        if(validateEmail){
         signup(user).then(data=>{
-            console.log(JSON.stringify(data))
             if(data.errors || data.error || data===undefined){
                 this.setState({regError:data.errors || data.error});
                 this.setState({loading:false});
@@ -52,11 +49,14 @@ export default class SignUp extends Component {
                 this.setState({loading:false,message:data.messages,note:true});
             }
         })
+      }else{
+        this.setState({loading:false,regError:"enter Valid email address"});
+      }
     };
 
     render() {
         const {email,password,firstName,lastName,gender,age,country,loading,regError ,redirecTo,note,message} = this.state;
-        if(redirecTo){return <Redirect to="Posts" />}
+        if(redirecTo){return <Redirect to="/" />}
         return (
             <>
             <SweetAlert
@@ -75,7 +75,7 @@ export default class SignUp extends Component {
               <div className="timeline-logo-area d-flex align-items-center">
                 <div className="timeline-logo">
                   <a href="/">
-                    <img src={logo} alt="timeline logo" />
+                    <img src={logo} height={50} width={90} alt="timeline logo" />
                   </a>
                 </div>
                 <div className="timeline-tagline">
@@ -94,7 +94,7 @@ export default class SignUp extends Component {
         <div className="container-fluid p-0">
           <div className="row no-gutters">
             <div className="col-lg-6 order-2 order-lg-1">
-              <div className="timeline-bg-content bg-img" data-bg="../../assets/images/timeline/adda-timeline.jpg">
+              <div className="timeline-bg-content bg-img" >
                 <h3 className="timeline-bg-title">.</h3>
               </div>
             </div>
@@ -121,16 +121,12 @@ export default class SignUp extends Component {
                       <div className="col-md-6">
                         <select className="nice-select" value={gender} onChange={this.handleChange("gender")}  name="sortby">
                           <option value="00">Gender</option>
-                          <option value="01">Male</option>
+                          <option value="01">Male</option>  
                           <option value="02">Female</option>
                         </select>
                       </div>
                       <div className="col-md-6">
-                        <select className="nice-select" value={age} onChange={this.handleChange("age")}  name="sortby">
-                          <option value="00">Age</option>
-                          <option value="01">18+</option>
-                          <option value="02">18-</option>
-                        </select>
+                        <Input className="nice-select" type="date" value={age} onChange={this.handleChange("age")}  name="sortby" />
                       </div>
                       <div className="col-12">
                         <select className="nice-select" value={country} onChange={this.handleChange("country")}  name="sortby">

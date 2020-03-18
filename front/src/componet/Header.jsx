@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-export const MainHeader = ({userId}) => {
+import logo from '../images/cathh.png'
+export const MainHeader = ({profilePhoto, noProfilePhoto}) => {
     return(
         <header>
   <div className="header-top sticky bg-white d-none d-lg-block">
@@ -11,8 +12,7 @@ export const MainHeader = ({userId}) => {
           <div className="header-top-navigation">
             <nav>
               <ul>
-                <li className="active"><Link to="/posts">Home</Link></li>
-                <li ><Link to={`/${userId}`}>Profile</Link></li>
+                <li ><Link to={`/`}> Home </Link></li>
                 <li className="msg-trigger"><a className="msg-trigger-btn" href="#a">message</a>
                   <div className="message-dropdown" id="a">
                     <div className="dropdown-title">
@@ -177,9 +177,9 @@ export const MainHeader = ({userId}) => {
         <div className="col-md-2">
           {/* brand logo start */}
           <div className="brand-logo text-center">
-            <a href="/posts">
-              <img src="" alt="I am Catholics" />
-            </a>
+            <Link to="/">
+              <img src={logo} alt="I am Catholics" />
+            </Link>
           </div>
           {/* brand logo end */}
         </div>
@@ -198,7 +198,7 @@ export const MainHeader = ({userId}) => {
               <div className="profile-thumb-small">
                 <a href="javascript:void(0)" className="profile-triger">
                   <figure>
-                    <img src="assets/images/profile/profile-small-1.jpg" alt="profile picture" />
+                    <img src={profilePhoto} onError={i=>i.target.src=`${noProfilePhoto}`} alt="profile picture" />
                   </figure>
                 </a>
                 <div className="profile-dropdown">
@@ -214,7 +214,7 @@ export const MainHeader = ({userId}) => {
                     </ul>
                     <ul>
                       <li><a href="#"><i className="flaticon-settings" />Setting</a></li>
-                      <li><a href="signup.html"><i className="flaticon-unlock" />Sing out</a></li>
+                      <li><Link to="/"><i className="flaticon-unlock" />Sing out</Link></li>
                     </ul>
                   </div>
                 </div>
@@ -229,14 +229,14 @@ export const MainHeader = ({userId}) => {
 </header>
     )
 }
-export const SecondHeader = () =>{
+export const SecondHeader = ({profilePhoto, noProfilePhoto}) =>{
     return(
 <header>
   <div className="mobile-header-wrapper sticky d-block d-lg-none">
     <div className="mobile-header position-relative ">
-      <div className="mobile-logo">
-        <Link to="/posts">
-          <img src="assets/images/logo/logo-white.png" alt="logo" />
+      <div className="mobile-logo" style={{backgroundColor:'#fff'}}>
+        <Link to="/">
+          <img src={logo}  alt="logo" />
         </Link>
       </div>
       <div className="mobile-menu w-100">
@@ -249,46 +249,12 @@ export const SecondHeader = () =>{
               <li>
                 <div className="frnd-request-member">
                   <figure className="request-thumb">
-                    <a href="profile.html">
-                      <img src="assets/images/profile/profile-midle-1.jpg" alt="proflie author" />
+                    <a href="/">
+                      <img src={profilePhoto} onError={i=>i.target.src=`${noProfilePhoto}`} alt="proflie author" />
                     </a>
                   </figure>
                   <div className="frnd-content">
-                    <h6 className="author"><a href="profile.html">merry watson</a></h6>
-                    <p className="author-subtitle">Works at HasTech</p>
-                    <div className="request-btn-inner">
-                      <button className="frnd-btn">confirm</button>
-                      <button className="frnd-btn delete">delete</button>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div className="frnd-request-member">
-                  <figure className="request-thumb">
-                    <a href="profile.html">
-                      <img src="assets/images/profile/profile-midle-2.jpg" alt="proflie author" />
-                    </a>
-                  </figure>
-                  <div className="frnd-content">
-                    <h6 className="author"><a href="profile.html">merry watson</a></h6>
-                    <p className="author-subtitle">Works at HasTech</p>
-                    <div className="request-btn-inner">
-                      <button className="frnd-btn">confirm</button>
-                      <button className="frnd-btn delete">delete</button>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div className="frnd-request-member">
-                  <figure className="request-thumb">
-                    <a href="profile.html">
-                      <img src="assets/images/profile/profile-midle-3.jpg" alt="proflie author" />
-                    </a>
-                  </figure>
-                  <div className="frnd-content">
-                    <h6 className="author"><a href="profile.html">merry watson</a></h6>
+                    <h6 className="author"><a href="/">merry watson</a></h6>
                     <p className="author-subtitle">Works at HasTech</p>
                     <div className="request-btn-inner">
                       <button className="frnd-btn">confirm</button>
@@ -359,7 +325,7 @@ export const SecondHeader = () =>{
               <div className="chat-text-field mob-text-box">
                 <textarea className="live-chat-field custom-scroll" placeholder="Text Message" defaultValue={""} />
                 <button className="chat-message-send" type="submit" value="submit">
-                  <img src="assets/images/icons/plane.png" alt />
+                  <img src="assets/images/icons/plane.png" alt="plan" />
                 </button>
               </div>
             </div>
@@ -378,12 +344,12 @@ export const SecondHeader = () =>{
           </li>
         </ul>
       </div>
-      <div className="mobile-header-profile">
+      <div className="mobile-header-profile" style={{backgroundColor:'#fff'}}>
         {/* profile picture end */}
-        <div className="profile-thumb profile-setting-box">
-          <a href="javascript:void(0)" className="profile-triger">
-            <figure className="profile-thumb-middle">
-              <img src="assets/images/profile/profile-small-1.jpg" alt="profile picture" />
+        <div className="profile-thumb profile-setting-box" style={{backgroundColor:'#fff'}} >
+          <a href="javascript:void(0)" className="profile-triger" style={{backgroundColor:'#fff'}}>
+            <figure className="profile-thumb-middle" style={{backgroundColor:'#fff'}}>
+              <img src={profilePhoto} onError={i=>i.target.src=`${noProfilePhoto}`} alt="profile picture" />
             </figure>
           </a>
           <div className="profile-dropdown text-left">

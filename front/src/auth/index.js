@@ -47,7 +47,7 @@ export const setName = (name, next) => {
 export const signout = next => {
     if (typeof window !== "undefined") localStorage.removeItem("jwt");
     next();
-    return fetch(`${process.env.REACT_APP_API_URL}/signout`, {
+    return fetch(`${API}/signout`, {
         method: "GET"
     })
         .then(response => {
@@ -72,7 +72,7 @@ export const isAuthenticated = () => {
 
 export const forgotPassword = email => {
     console.log("email: ", email);
-    return fetch(`${process.env.REACT_APP_API_URL}/forgot-password/`, {
+    return fetch(`${API}/forgot-password/`, {
         method: "PUT",
         headers: {
             Accept: "application/json",
@@ -88,7 +88,7 @@ export const forgotPassword = email => {
 };
 
 export const resetPassword = resetInfo => {
-    return fetch(`${process.env.REACT_APP_API_URL}/reset-password/`, {
+    return fetch(`${API}/reset-password/`, {
         method: "PUT",
         headers: {
             Accept: "application/json",
@@ -104,7 +104,7 @@ export const resetPassword = resetInfo => {
 };
 
 export const socialLogin = user => {
-    return fetch(`${process.env.REACT_APP_API_URL}/social-login/`, {
+    return fetch(`${API}/social-login/`, {
         method: "POST",
         headers: {
             Accept: "application/json",

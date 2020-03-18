@@ -1,84 +1,12 @@
-import React,{Fragment,Component} from 'react';
+import React from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import {Card, CardImg, CardText, CardBody, CardTitle,CardFooter, CardLink, CardSubtitle, Button} from 'reactstrap';
 import { isAuthenticated } from '../auth';
-import { deletePost } from '../screen/post/apiPost';
-
-
-
-
-export const NewPostCard = () => {
-  ///const {title,body} =this.state;
-    return(
-<div className="card card-small">
-  <div className="share-box-inner">
-    {/* profile picture end */}
-    <div className="profile-thumb">
-      <a href="#">
-        <figure className="profile-thumb-middle">
-          <img src="assets/images/profile/profile-small-37.jpg" alt="profile picture" />
-        </figure>
-      </a>
-    </div>
-    {/* profile picture end */}
-    {/* share content box start */}
-    <div className="share-content-box w-100">
-      <form className="share-text-box">
-        <textarea name="share" className="share-text-field" aria-disabled="true" placeholder="Say Something" data-toggle="modal" data-target="#textbox" id="email" defaultValue={""} />
-        <button className="btn-share" type="submit">share</button>
-      </form>
-    </div>
-    {/* share content box end */}
-    {/* Modal start */}
-    <div className="modal fade" id="textbox" aria-labelledby="textbox">
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Share Your Mood</h5>
-            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div className="modal-body custom-scroll">
-            <input name="share" className="form-control" placeholder="Title of your post"  />
-            <br />
-            <textarea name="share" className="share-field-big custom-scroll" placeholder="Say Something"  />
-          </div>
-          <div className="modal-footer">
-            <button type="button" className="post-share-btn" data-dismiss="modal">cancel</button>
-            <button type="button" className="post-share-btn">post</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    {/* Modal end */}
-  </div>
-</div>
-
-    )
-}
+//import { deletePost } from '../screen/post/apiPost';
 
 export const ReadPostCard = ({
   likeToggle,
   post, postImage, imageAlt, noImage,singlePost,auth,profilePhoto,noProfilePhoto,
    handledelete, like, likes,comment}) => {
-    /* const token = isAuthenticated().token;
-     const postId = post._id;
-    console.log(postId);
-   const handledelete=()=>{
-    deletePost(postId,token)
-    .then(data=>{
-      if(data.error || data===undefined){
-        return console.log("error");
-        console.log(data)
-      }
-      console.log(data);
-      alert(data.message);
-      window.location.reload("/Posts");
-      return <Redirect to="./Posts" />
-    })
-  }
- */
  return(
  <div className="card">
   {/* post title start */}
@@ -122,13 +50,13 @@ export const ReadPostCard = ({
     <h4>{post.title}</h4>
     <div className="post-thumb-gallery">
       <figure className="post-thumb img-popup">
-        <a href={postImage}>
+        <Link href={postImage}>
           { singlePost ? 
           (<img src={postImage} alt={imageAlt} onError={i=>i.target.src=`${noImage}`}   />) : 
           (<img src={postImage} alt={imageAlt} onError={i=>i.target.src=`${noImage}`} width={510} height={270} />)
           }
           
-        </a>
+        </Link>
       </figure>
     </div>
     <p className="post-desc">
@@ -185,120 +113,4 @@ export const EmptyPost =({post})=>{
         </div>
       </div>
   )
-}
-
-export const PostCard = ({posts})=>{
-    return(
-        posts.map((post,index)=>{
-            return(
-                <Fragment key={index}>
-                <Card >
-                <CardImg src={post.logo} className="card-img-top" alt={post.title} />
-                <CardBody>
-                <CardTitle> {post.title} </CardTitle>
-                <CardText>{post.body}</CardText>
-                <CardFooter>
-                <Link to="/" className="card-link">Read More ... </Link> |
-                <Link to="/" className="card-link">Like </Link> | 
-                <Link to="/" className="card-link">comment  </Link> | 
-                </CardFooter>
-                </CardBody>
-               </Card>
-               <hr />
-               </Fragment>
-            )
-        })
-        
-    )
-};
-export const PostTitle = ({posts})=>{
-    return(
-        posts.map((post,index)=>(
-            <Fragment key={index}>
-                <hr />
-                <Card>
-                     <CardTitle className="text-center">{post.title}</CardTitle>
-                </Card>
-            
-            </Fragment>
-        ))
-    )
-}
-export const SinglePostCard = (props)=>{
-    
-   return(
-       <div className="card" style={{width: '34rem'}}>
-           <img src={props.logo} className="card-img-top" alt={props.title} />
-           <div className="card-body">
-               <h5 className="card-title">{props.title} </h5>
-               <p className="card-text">{props.body}</p>
-           </div>
-           <div className="card-footer">
-           <Link to="/" className="card-link">Read More ... </Link> |
-           <Link to="/" className="card-link">Like </Link> | 
-           <Link to="/" className="card-link">comment  </Link> | 
-           </div>
-       </div>
-   )
-};
-
-export const NewPostCardA = ({logo,title,body}) =>{
-
-    return(
-        <div className="card" style={{width: '34rem'}}>
-            <img src={logo} className="card-img-top" alt={title} />
-            <div className="card-body">
-            <form>
-                <div className="form-group">
-                    <label>Post Title </label>
-                    <input className="form-control" type="text" />
-                </div>
-                <div className="form-group">
-                    <label>Post Content </label>
-                    <textarea className="form-control" rows={3} defaultValue={""} />
-                </div>
-                <div className="form-group">
-                    <label>Select photo </label>
-                    <input type="file" className="form-control" />
-                </div>
-                <button className="btn btn-primary btn-right">Post </button>
-           </form>
-            </div>
-       </div>
-    )
-}
-
-export const Profile = () =>{
-    return(
-        <div className="card" style={{width: '16rem'}}>
-        <img src="..." className="card-img-top" alt="..." />
-        <div className="card-body">
-            <h5 className="card-title">Card title</h5>
-            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-        <ul className="list-group list-group-flush">
-            <li className="list-group-item">Cras justo odio</li>
-            <li className="list-group-item">Dapibus ac facilisis in</li>
-            <li className="list-group-item">Vestibulum at eros</li>
-        </ul>
-        <div className="card-body">
-            <Link to="/"className="card-link">Card link</Link>
-            <Link to="/" className="card-link">Another link</Link>
-        </div>
-        </div>
-    )
-}
-export const FriendList =()=>{
-    return(
-        <div className="card" style={{width: '18rem'}}>
-            <div className="card-header">
-                Featured
-            </div>
-            <ul className="list-group list-group-flush">
-                <li className="list-group-item">Cras justo odio</li>
-                <li className="list-group-item">Dapibus ac facilisis in</li>
-                <li className="list-group-item">Vestibulum at eros</li>
-            </ul>
-        </div>
-    )
 }
