@@ -3,10 +3,9 @@ import {Link} from 'react-router-dom';
 import { isAuthenticated } from '../../../../auth';
 
 
-export  const ProfileHeader =({auth, userId, cover,photo, nophoto, nocover})=> {
+export  const ProfileHeader =({ userId, cover,photo, nophoto, nocover})=> {
   console.log(photo)
   const yellow = "#ee35";
-  //style={{backgroundColor:`${yellow}`, backgroundImages:`${photo ? photo:nophoto}`,backgroundPosition:'center', backgroundSize:'cover'}}
   const bg = {
      backgroundColor:`${yellow}`,
      backgroundImage:`url(${cover ? cover:nocover})`,
@@ -22,7 +21,7 @@ export  const ProfileHeader =({auth, userId, cover,photo, nophoto, nocover})=> {
                 <div className="col-lg-3 col-md-3">
                   <div className="profile-picture-box">
                     <figure className="profile-picture">
-                      <Link to={`/profile${userId}`}>
+                      <Link to={`/user/${userId}`}>
                         <img src={photo ? photo : nophoto} onError={nophoto} alt="profile picture" />
                       </Link>
                     </figure>
@@ -33,7 +32,7 @@ export  const ProfileHeader =({auth, userId, cover,photo, nophoto, nocover})=> {
                     <div className="main-menu-inner header-top-navigation">
                       <nav>
                         <ul className="main-menu">
-                          <li className="active"><Link to={`/${userId}`}>timeline</Link></li>
+                          <li className="active"><Link to={`/`}>timeline</Link></li>
                           <li><Link to={`/about/${userId}`}>about</Link></li>
                           <li><Link to={`/photo/${userId}`}>photos</Link></li>
                           <li><Link to={`/friend/${userId}`}>friends</Link></li>
@@ -44,7 +43,7 @@ export  const ProfileHeader =({auth, userId, cover,photo, nophoto, nocover})=> {
                 </div>
                 <div className="col-lg-2 col-md-3 d-none d-md-block">
                   <div className="profile-edit-panel">
-                   {isAuthenticated().user && isAuthenticated().user._id === userId ? (<button className="edit-btn">edit profile</button>):("")} 
+                   {isAuthenticated().user && isAuthenticated().user._id === userId ? (<Link to="/edit/profile"><button className="edit-btn">edit profile</button></Link>):("")} 
                   </div>
                 </div>
               </div>
@@ -276,7 +275,7 @@ export const RightSideBar = ({user,profileImage,imageAlt,noProfilePhoto})=> {
                                </div>
                                {/* profile picture end */}
                                <div className="unorder-list-info">
-                                 <h3 className="list-title"><Link to={`/${user._id}`} >{user.firstName +" "+ user.lastName}</Link></h3>
+                                 <h3 className="list-title"><Link to={`/user/${user._id}`} >{user.firstName +" "+ user.lastName}</Link></h3>
                                  <p className="list-subtitle"><Link to={`/friend/${user._id}`}>10 mutual</Link></p>
                                </div>
                                <button className="like-button">

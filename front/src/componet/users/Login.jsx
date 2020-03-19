@@ -30,7 +30,6 @@ export default class Login extends Component {
         this.setState({loading:true});
         const {email,password}=this.state;
         const user = {email,password};
-        console.log(JSON.stringify(user));
          if (password !== "" && validateEmail(email)){
              signin(user)
              .then(data=>{

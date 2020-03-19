@@ -243,7 +243,7 @@ export const SecondHeader = ({profilePhoto, noProfilePhoto}) =>{
         <ul>
           <li>
             <button className="notification request-trigger"><i className="flaticon-users" />
-              <span>03</span>
+              {/*<span>03</span>*/}
             </button>
             <ul className="frnd-request-list">
               <li>
@@ -267,12 +267,12 @@ export const SecondHeader = ({profilePhoto, noProfilePhoto}) =>{
           </li>
           <li>
             <button className="notification"><i className="flaticon-notification" />
-              <span>03</span>
+              {/*<span>03</span>*/}
             </button>
           </li>
           <li>
             <button className="chat-trigger notification"><i className="flaticon-chats" />
-              <span>04</span>
+              {/*<span>04</span>*/}
             </button>
             <div className="mobile-chat-box">
               <div className="live-chat-title">

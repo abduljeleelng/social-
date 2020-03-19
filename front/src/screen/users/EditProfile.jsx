@@ -10,44 +10,30 @@ import {userList} from './API';
 import DefaultImage from "../post/defaultImage.jpg";
 import NoCover from "./images/mountains.jpg";
 import NoProfile from "./images/avatar.jpg";
+import Status from "./component/profile/Status";
+import Edit from './component/profile/Edit.jsx';
 
 
-export default class Profile extends Component {
+
+export default class EditProfile extends Component {
   constructor(props){
     super(props);
     this.state={
-      auth:false,
-      userId:"",
-      redirect:false,
-      post:[],
-      user:[],
+        user:[],
     }
   }
-
+  
   componentDidMount(){
-    const userId = this.props.match.params.userId;
-    if(isAuthenticated()){this.setState({auth:true})}
-    postBy(userId).then((data,err)=>{
-      if(err){
-        console.log(err);
-       this.setState({redirect:true});
-      }
-      if(data.error){
-         console.log(data.error);
-         this.setState({redirect:true});
-      }else{
-      this.setState({post:data.posts});
-      }
-    })
     userList().then(data=>{
-      if(data.error){
-        return console.log(data.error)
-      }
-      this.setState({user:data.user});
-    });
+        if(data.error){
+          return console.log(data.error)
+        }
+        this.setState({user:data.user});
+      });
+
   }
     render() {
-      const {auth,userId,redirect,post,user}=this.state;
+      const {userId,redirect, user}=this.state;
       if(redirect){return <Redirect to="/" />}
         return (
  <>
@@ -60,13 +46,11 @@ export default class Profile extends Component {
       <div className="row">
           <LeftSideBar />
           <div className="col-lg-6 order-1 order-lg-2">
-          { auth ? (<CreatePost profileImage="" noProfileImage={NoProfile} />):("")}
-          {post.length > 0 ? post.map((post,index)=>(
-               <ReadPostCard key={index} auth={auth} post={post} postImage={photoAPI+post._id} noImage={DefaultImage} imageAlt={post.title} profilePhoto="" noProfilePhoto={NoProfile} />
-                )):<EmptyPost post={post} />
-            }
+          <Status profileImage="" noProfileImage={NoProfile} />
+          <Edit profileImage="" noProfilePhoto={NoProfile} noImage={DefaultImage} />
           </div>
           <RightSideBar user={user} profileImage="" noProfilePhoto={NoProfile} noImage={DefaultImage} />
+          
       </div>
     </div>
   </div>
