@@ -175,3 +175,36 @@ exports.findPeople = (req, res) => {
         res.json(users);
     }).select("firstName");
 };
+exports.saveAbout = (req,res,next)=>{
+    const {userId,about,occupation,address,interest,education,status}=req.body;
+    User.findByIdAndUpdate(userId)
+};
+
+exports.updateAbout=(req,res,next)=>{
+    let user = req.profile;
+    user=_.extend(user,req.body); //extend mutate the source object
+    user.updated= Date.now();
+    user.save((err)=>{
+        if (err){return res.status(400).json({error:"unauthorised access"})}
+        //req.user.hashed_password = undefined;
+       // req.user._v = undefined;
+        res.status(200).json({user})
+        next();
+    })
+};
+
+exports.updateAboutA=(req,res,next)=>{
+    let user = req.profile;
+    //res.status(200).json({user});
+    
+    user=_.extend(user,req.body); //extend mutate the source object
+    user.updated= Date.now();
+    user.save((err)=>{
+        if (err){return res.status(400).json({error:"unauthorised access"})}
+        //req.user.hashed_password = undefined;
+       // req.user._v = undefined;
+        res.status(200).json({user})
+       // next();
+    })
+    
+};
