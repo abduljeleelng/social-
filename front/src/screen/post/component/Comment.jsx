@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import { isAuthenticated } from '../../../auth';
 import {comment,uncomment} from '../apiPost';
-import NoProfile from "../users/images/avatar.jpg";
+//import NoProfile from "../../../images/avatar.jpg";
 
 
 export default class Comment extends Component {
@@ -75,10 +75,10 @@ export default class Comment extends Component {
                   <figure className="profile-thumb-middle">
                     <img 
                     src={
-                      NoProfile ? 
-                      (NoProfile):(noProfileImage)
+                      profileImage ? 
+                      (profileImage):(noProfileImage)
                     } 
-                      onError={noProfileImage} alt=""
+                      onError={noProfileImage} alt="profile"
                     />
                   </figure>
                 </Link>
