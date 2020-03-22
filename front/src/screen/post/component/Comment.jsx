@@ -6,12 +6,15 @@ import {comment,uncomment} from '../apiPost';
 
 
 export default class Comment extends Component {
-    state={
+  constructor(){
+    super();
+    this.state={
       text:"",
       userId:"",
       token:"",
       loading:false,
     }
+  }
     handleChange=text=>e=>{
       this.setState({[text]:e.target.value});
     }
@@ -61,7 +64,7 @@ export default class Comment extends Component {
           this.deleteComment(comment);
       }
   };
-    componentWillMount(){
+    componentDidMount(){
       this.setState({token:isAuthenticated().token,userId:isAuthenticated().user._id})
     }
     render() {
