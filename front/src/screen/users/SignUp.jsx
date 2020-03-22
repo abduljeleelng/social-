@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Redirect} from 'react-router-dom';
+import { Redirect, Link} from 'react-router-dom';
 import SweetAlert from 'sweetalert2-react'
-import Login from '../../componet/users/Login';
+import Login from './component/users/Login';
 import {signup } from '../../auth';
 import logo from "../../images/cathh.png";
 import {Input} from 'reactstrap'
@@ -139,7 +139,7 @@ export default class SignUp extends Component {
                         {loading ? ("loading ......"):(<button className="submit-btn" onClick={this.HandleSignUp}>Create Account</button>)}
                       </div>
                     </div>
-                    <h6 className="terms-condition">I have read &amp; accepted the <a href="#">terms of use</a></h6>
+                    <h6 className="terms-condition">I have read &amp; accepted the <Link href="/">terms of use</Link></h6>
                   </form>
                 </div>
               </div>

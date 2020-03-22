@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { updateAbout } from '../../API';
+import { isAuthenticated } from '../../../../auth';
 
 
 export default class Edit extends Component {
@@ -11,6 +13,8 @@ export default class Edit extends Component {
             education:"",
             interest:"",
             about:"",
+            userId:"",
+            token:"",
         }
     }
     handleChange=name=>e=>{
@@ -18,9 +22,16 @@ export default class Edit extends Component {
     }
     handleSave=e=>{
         e.preventDefault();
-        const  {occupation,address,education,interest,about} = this.state;
-        const save = {occupation,address,education,interest,about}
-        console.log(JSON.stringify(save));
+        this.setState({loading:true});
+        const  {occupation,address,education,interest,about,userId,token} = this.state;
+        const aboutme = {occupation,address,education,interest,about}
+        updateAbout(userId,token,aboutme).then(data=>{
+            if(data.error){return console.log(data.error)}
+            this.setState({loading:false});
+        });
+    }
+    componentDidMount(){
+        this.setState({userId:isAuthenticated().user._id,token:isAuthenticated().token});
     }
     render() {
         const {loading,occupation,address,education,interest,about}=this.state;

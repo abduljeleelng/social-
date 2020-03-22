@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Redirect} from 'react-router-dom';
+import {Redirect, Link} from 'react-router-dom';
 import {isAuthenticated} from "../../auth";
 import {newPost} from "./apiPost";
 
@@ -28,11 +28,8 @@ class CreatePost extends Component{
   }
 
   handleChange=name=>event=>{
-   // this.setState({[name]:event.target.value});
-   // this.setState({["photo"]:event.target.files[0]});
     this.setState({ error: "" });
     const value = name === "photo" ? event.target.files[0] : event.target.value;
-    //const fileSize = name === "photo" ? event.target.files[0].size : 0;
     this.postData.set(name, value);
     this.setState({ [name]: value });
   }
@@ -61,21 +58,22 @@ class CreatePost extends Component{
     e.preventDefault();
   }
   render(){
-      const {title,body,note,error,gohome,reDirect,loading,photo,} = this.state;
+      const {title,body,gohome,reDirect,loading,photo,} = this.state;
       const {profileImage,noProfileImage} = this.props;
-      //console.log(photo);
+      const userId = isAuthenticated().user._id
+
       if(gohome){ window.location.reload(false); };
       if(reDirect){ return <Redirect to="/" />};
     return(
       <div className="card card-small">
           <div className="share-box-inner">
-            {/* profile picture end */}
+      
             <div className="profile-thumb">
-              <a href="#">
+              <Link to={`/user/${userId}`}>
                 <figure className="profile-thumb-middle">
-                  <img src={profileImage ? profileImage:noProfileImage} onError={noProfileImage} alt="profile picture" />
+                  <img src={profileImage ? profileImage:noProfileImage} onError={i=>i.target.src=`${noProfileImage}`}  alt="profile" />
                 </figure>
-              </a>
+              </Link>
             </div>
             {/* profile picture end */}
             {/* share content box start */}

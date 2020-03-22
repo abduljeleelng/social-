@@ -1,19 +1,13 @@
 import React, { Component } from 'react';
 import {MainHeader, SecondHeader } from '../../componet/Header.jsx';
 import {ProfileHeader,LeftSideBar,RightSideBar,FriendZone,NotificationZone,AdvertZone} from "./component/profile/Card";
-import CreatePost from "../post/CreatePost";
-import { ReadPostCard,EmptyPost } from '../../componet/Card.jsx';
-import {isAuthenticated} from "../../auth/index";
 import { Redirect } from 'react-router-dom';
-import { postBy,photoAPI } from '../post/apiPost.jsx';
 import {userList} from './API';
 import DefaultImage from "../post/defaultImage.jpg";
 import NoCover from "./images/mountains.jpg";
 import NoProfile from "./images/avatar.jpg";
 import Status from "./component/profile/Status";
 import Edit from './component/profile/Edit.jsx';
-
-
 
 export default class EditProfile extends Component {
   constructor(props){

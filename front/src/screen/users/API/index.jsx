@@ -6,3 +6,19 @@ export const userList = ()=>{
     })
     .catch(error=>{console.log(error)})
 };
+
+export const updateAbout = (userId,token,aboutme) =>{
+    return fetch(`${API}/user/about/${userId}`,
+    {method:"PUT",
+    headers:{
+        Accept:"application/json",
+        "Content-Type": "application/json",
+        Authorization:`Bearer ${token}`
+    },
+    body: JSON.stringify(aboutme)
+})
+.then(response=>{return response.json();})
+.catch(error=>console.log(error))
+};
+
+export const photoAPI = `${API}/about/photo/`;

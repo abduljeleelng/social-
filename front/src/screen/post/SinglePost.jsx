@@ -10,7 +10,7 @@ import NoProfile from "../users/images/avatar.jpg";
 //import { CardProfile, LikeCard, TopNew } from '../../componet/RSideBar';
 //import { Notifications, Advert, FriendsZOne } from '../../componet/LSideBar';
 import { Redirect,Link } from 'react-router-dom';
-import Comment from './Comment';
+import Comment from './component/Comment';
 import {CommentList} from './component'
 import {comment,uncomment,like,unlike} from './apiPost';
 //import CommentList from './CommentList';

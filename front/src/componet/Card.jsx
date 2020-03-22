@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, Redirect} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import { isAuthenticated } from '../auth';
 //import { deletePost } from '../screen/post/apiPost';
 
@@ -15,7 +15,7 @@ export const ReadPostCard = ({
     <div className="profile-thumb">
     <Link to={`/${post.postedBy._id}`}>
         <figure className="profile-thumb-middle">
-          <img src={profilePhoto} onError={i=>i.target.src=`${noProfilePhoto}`} alt="profile picture" />
+          <img src={profilePhoto} onError={i=>i.target.src=`${noProfilePhoto}`} alt="profile" />
         </figure>
       </Link>
     </div>
@@ -50,7 +50,7 @@ export const ReadPostCard = ({
     <h4>{post.title}</h4>
     <div className="post-thumb-gallery">
       <figure className="post-thumb img-popup">
-        <Link href={postImage}>
+        <Link to="/">
           { singlePost ? 
           (<img src={postImage} alt={imageAlt} onError={i=>i.target.src=`${noImage}`}   />) : 
           (<img src={postImage} alt={imageAlt} onError={i=>i.target.src=`${noImage}`} width={510} height={270} />)

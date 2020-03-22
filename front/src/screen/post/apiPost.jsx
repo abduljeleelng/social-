@@ -28,7 +28,7 @@ export const newPost = (userId,token,post) =>{
     return response.json();
 })
 .catch(error=>console.log(error))
-}
+};
 
 export const photoAPI = `${API}/posts/photo/`;
 

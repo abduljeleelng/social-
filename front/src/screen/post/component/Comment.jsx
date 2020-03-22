@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
-import { isAuthenticated } from '../../auth';
-import {comment,uncomment} from './apiPost';
+import { isAuthenticated } from '../../../auth';
+import {comment,uncomment} from '../apiPost';
 import NoProfile from "../users/images/avatar.jpg";
 
 

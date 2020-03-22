@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {MainHeader, SecondHeader } from '../../componet/Header.jsx';
-import {ProfileHeader,LeftSideBar,RightSideBar,FriendZone,NotificationZone,AdvertZone} from "./component/profile/Card";
+//import {ProfileHeader,LeftSideBar,RightSideBar,FriendZone,NotificationZone,AdvertZone} from "./component/profile/Card";
+import {ProfileHeader,LeftSideBar,RightSideBar} from "./component/profile/Card";
 import CreatePost from "../post/CreatePost";
-import { ReadPostCard,EmptyPost } from '../../componet/Card.jsx';
+import { ReadPostCard,EmptyPost } from '../post/component';
 import {isAuthenticated} from "../../auth/index";
 import { Redirect } from 'react-router-dom';
 import { postBy,photoAPI } from '../post/apiPost.jsx';

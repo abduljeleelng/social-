@@ -1,6 +1,7 @@
-import React,{Fragment} from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-export const Notifications = () =>{
+export const Notifications = ({profilePhoto, noProfilePhoto}) =>{
 
         return(
 <div className="card widget-item">
@@ -10,15 +11,15 @@ export const Notifications = () =>{
       <li className="unorder-list">
         {/* profile picture end */}
         <div className="profile-thumb">
-          <a href="#">
+          <Link to="/">
             <figure className="profile-thumb-small">
-              <img src="assets/images/profile/profile-small-9.jpg" alt="profile picture" />
+              <img src={profilePhoto} onError={i=>i.target.src=`${noProfilePhoto}`} alt="profile" />
             </figure>
-          </a>
+          </Link>
         </div>
         {/* profile picture end */}
         <div className="unorder-list-info">
-          <h3 className="list-title"><a href="#">Any one can join with us if you want</a></h3>
+          <h3 className="list-title"><Link to="/">Any one can join with us if you want</Link></h3>
           <p className="list-subtitle">5 min ago</p>
         </div>
       </li>
@@ -35,9 +36,9 @@ export const Advert = ()=>{
   <h4 className="widget-title">Advertizement</h4>
   <div className="widget-body">
     <div className="add-thumb">
-      <a href="#">
+      <Link to="/">
         <img src="assets/images/banner/advertise.jpg" alt="advertisement" />
-      </a>
+      </Link>
     </div>
   </div>
 </div>
@@ -53,20 +54,20 @@ export const FriendsZOne = () =>{
       <li className="unorder-list">
         {/* profile picture end */}
         <div className="profile-thumb">
-          <a href="#">
+          <Link to="/">
             <figure className="profile-thumb-small">
-              <img src="assets/images/profile/profile-small-33.jpg" alt="profile picture" />
+              <img src="assets/images/profile/profile-small-33.jpg" alt="profile" />
             </figure>
-          </a>
+          </Link>
         </div>
         {/* profile picture end */}
         <div className="unorder-list-info">
-          <h3 className="list-title"><a href="#">Ammeya Jakson</a></h3>
-          <p className="list-subtitle"><a href="#">10 mutual</a></p>
+          <h3 className="list-title"><Link to="/">Ammeya Jakson</Link></h3>
+          <p className="list-subtitle"><Link to="/">10 mutual</Link></p>
         </div>
         <button className="like-button">
-          <img className="heart" src="assets/images/icons/heart.png" alt />
-          <img className="heart-color" src="assets/images/icons/heart-color.png" alt />
+          <img className="heart" src="assets/images/icons/heart.png" alt="like" />
+          <img className="heart-color" src="assets/images/icons/heart-color.png" alt="unlike" />
         </button>
       </li>
     </ul>
