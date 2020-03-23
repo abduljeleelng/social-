@@ -1,22 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export const CardProfile = ({userId,coverPhoto,noCoverPhoto ,profilePhoto, noProfilePhoto}) =>{
+export const CardProfile = ({userId,coverPhoto,noCoverPhoto,user,profilePhoto, noProfilePhoto}) =>{
     return(
     //return(
 <div className="card card-profile widget-item p-0">
   <div className="profile-banner">
     <figure className="profile-banner-small">
       <Link to={`/user/${userId}`}>
-        <img src={coverPhoto} onError={i=>i.target.src=`${noCoverPhoto}`} alt="profile" />
+        <img src={coverPhoto} onError={i=>i.target.src=`${noCoverPhoto}`}  height="100" width="100%" alt="profile" />
       </Link>
       <Link to={`/user/${userId}`} className="profile-thumb-2">
         <img src={profilePhoto} onError={i=>i.target.src=`${noProfilePhoto}`} alt="profile" />
       </Link>
     </figure>
     <div className="profile-desc text-center">
-      <h6 className="author"><Link to={`/user/${userId}`}>Dimbel Lebmid</Link></h6>
-      <p>Any one can join with but Social network us if you want Any one can join with us if you want</p>
+    <h6 className="author"><Link to={`/user/${userId}`}>{user.firstName ? (user.firstName+" "+user.lastName):"finder user"}</Link></h6>
+      <p>{user.status ? user.status:" No Status Yet"}</p>
     </div>
   </div>
 </div>

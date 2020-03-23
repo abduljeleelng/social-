@@ -4,11 +4,12 @@ import {MainHeader, SecondHeader } from '../../componet/Header.jsx';
 import {postList,photoAPI,deletePost} from "./apiPost";
 import {isAuthenticated} from "../../auth/index";
 import CreatePost from "./CreatePost";
-import DefaultImage from "./defaultImage.jpg";
-import NoProfile from "../users/images/avatar.jpg";
 import { CardProfile, LikeCard, TopNew } from './component/RSideBar.jsx';
 import { Notifications, Advert, FriendsZOne } from './component/LSideBar';
 import NoCover from "../../images/mountains.jpg";
+import DefaultImage from "./defaultImage.jpg";
+import NoProfile from "../users/images/avatar.jpg";
+import { user } from '../users/API';
 
 class Post extends Component{
     constructor(props){
@@ -18,6 +19,7 @@ class Post extends Component{
             page:1,
             auth:true,
             loading:true,
+            user:"",
         };
     };
     loadPosts(page){
@@ -28,11 +30,6 @@ class Post extends Component{
             this.setState({post:data});
         })
     };
-    componentDidMount(){
-        const {page}=this.state;
-        this.loadPosts(page);
-        this.setState({loading:false});
-    };
     loadMore = number => {
         this.setState({ page: this.state.page + number });
         this.loadPosts(this.state.page + number);
@@ -41,6 +38,22 @@ class Post extends Component{
         this.setState({ page: this.state.page - number });
         this.loadPosts(this.state.page - number);
     };
+    async componentDidMount(){
+        try{
+            const userId = await isAuthenticated().user._id;
+            const page= await this.state.page;
+            this.loadPosts(page);
+            this.setState({loading:false});
+            user(userId).then(data=>{
+                if(data.error){return console.log(data.error)}
+                this.setState({user:data})
+            });
+
+        }catch(error){
+            console.log(error)
+        }
+    };
+
     handledelete=(postId,token)=>{
       deletePost(postId,token)
       .then(data=>{
@@ -51,9 +64,9 @@ class Post extends Component{
       })
     }
     render(){
-        const {post,auth,loading} = this.state;
-        //const token = isAuthenticated().token;
+        const {post,auth,loading,user} = this.state;
         const userId = isAuthenticated().user._id
+        console.log(JSON.stringify(user))
         return(
             <>
             <MainHeader noProfilePhoto={NoProfile} profilePhoto=""  />
@@ -83,7 +96,7 @@ class Post extends Component{
       <div className="row">
         <div className="col-lg-3 order-2 order-lg-1">
           <aside className="widget-area">
-                    <CardProfile noProfilePhoto={NoProfile} profilePhoto="" coverPhoto="" noCoverPhoto={NoCover} userId={userId} />
+                    <CardProfile noProfilePhoto={NoProfile} profilePhoto="" coverPhoto="" noCoverPhoto={NoCover} userId={userId} user={user} />
                     <LikeCard />
                     <TopNew />
           </aside>

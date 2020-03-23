@@ -40,6 +40,7 @@ export default class SignUp extends Component {
         this.setState({loading:true});
         const {email,password,firstName,lastName,gender,age,country}=this.state;
         const user = {email,password,firstName,lastName,gender,age,country};
+
         if(validateEmail){
         signup(user).then(data=>{
             if(data.errors || data.error || data===undefined){
@@ -139,7 +140,7 @@ export default class SignUp extends Component {
                         {loading ? ("loading ......"):(<button className="submit-btn" onClick={this.HandleSignUp}>Create Account</button>)}
                       </div>
                     </div>
-                    <h6 className="terms-condition">I have read &amp; accepted the <Link href="/">terms of use</Link></h6>
+                    <h6 className="terms-condition">I have read &amp; accepted the <Link to="/">terms of use</Link></h6>
                   </form>
                 </div>
               </div>
