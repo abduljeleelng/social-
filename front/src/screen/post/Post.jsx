@@ -54,7 +54,6 @@ class Post extends Component{
                 if(data.error){ return console.log(data.error)}
                 this.setState({users:data.user});
             })
-
         }catch(error){
             console.log(error)
         }

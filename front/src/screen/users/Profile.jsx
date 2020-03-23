@@ -45,10 +45,9 @@ export default class profile extends Component {
     })
   }
   componentDidUpdate(prevProps){
-    const userId  = this.props.match.params.userId
-    if(this.props.userId !== prevProps.userId){
+    if(this.props.match.params.userId !== this.state.userId){
       const userId  = this.props.match.params.userId;
-      //this.setState({userId:userId});
+      this.setState({userId:userId});
       postBy(userId).then((data,err)=>{
           if(data.error){
              console.log(data.error)
@@ -85,7 +84,7 @@ export default class profile extends Component {
           <CreatePost profileImage="" noProfileImage={NoProfile} />
           { post.length > 0 ? post.map((post,index)=>(
                <ReadPostCard key={index} auth={auth} post={post} postImage={photoAPI+post._id} noImage={DefaultImage} imageAlt={post.title} profilePhoto="" noProfilePhoto={NoProfile} />
-                )):<EmptyPost post={post} />
+                )):<EmptyPost post={{"title":"No Post !!!","detail":" this user don't have any post for now"}} />
           }
           </div>
           <RightSideBar user={user} profileImage="" noProfilePhoto={NoProfile} noImage={DefaultImage} />

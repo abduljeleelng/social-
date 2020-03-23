@@ -102,12 +102,12 @@ export const ReadPostCard = ({
     )
 }
 
-export const EmptyPost =()=>{
+export const EmptyPost =({post})=>{
   return(
       <div className="card">
         <div className="post-content">
-          <h4 style={{alignContent:"center"}} className="text-center"> No Post from Any Users </h4>
-          <p className="post-desc text-center"> you can login and ppost to the communities</p>
+          <h4 style={{alignContent:"center"}} className="text-center"> {post.title} </h4>
+          <p className="post-desc text-center"> {post.detail}</p>
           <div className="post-meta">
           </div>
         </div>

@@ -1,16 +1,49 @@
 import React, { Component } from 'react';
 import {MainHeader, SecondHeader } from '../../componet/Header.jsx';
 import {ProfileHeader} from "./component/profile/Card";
+import { Link } from 'react-router-dom';
+import NoCover from "./images/mountains.jpg";
+import NoProfile from "./images/avatar.jpg";
+import { isAuthenticated } from '../../auth/index.js';
+import { user, userList } from './API/index.jsx';
+//import NoProfile from "./images/avatar.jpg";
 
 export default class Friend extends Component {
+  constructor(){
+    super();
+    this.state={
+      userId:"",
+      user:"",
+      users:"",
+      
+    }
+  }
+
+  async componentDidMount(){
+    try{
+      const userId = await isAuthenticated().user._id;
+      this.setState({userId:userId});
+      user(userId).then(data=>{
+        if(data.error){return console.log(data.error)}
+        this.setState({user:data});
+      })
+      userList().then(data=>{
+        if(data.error){return console.log(data.error)};
+        this.setState({users:data.user})
+      })
+    }catch(error){return console.log(error)}
+  }
     render() {
+      const {userId,user,users}= this.state;
+      //console.log(JSON.stringify(user));
+      //console.log(JSON.stringify(users))
         return (
           <>
-          <MainHeader />
-          <SecondHeader />
+          <MainHeader  noProfilePhoto={NoProfile} profilePhoto="" />
+          <SecondHeader  noProfilePhoto={NoProfile} profilePhoto="" />
 <main>
   <div className="main-wrapper">
-    <ProfileHeader />
+    <ProfileHeader userId={userId} cover="" nocover={NoCover} photo="" nophoto={NoProfile} />
     {/* sendary menu start */}
     <div className="menu-secondary">
       <div className="container">
@@ -18,7 +51,7 @@ export default class Friend extends Component {
           <div className="col-lg-12">
             <div className="secondary-menu-wrapper secondary-menu-2 bg-white">
               <div className="page-title-inner">
-                <h4 className="page-title">friends (1250)</h4>
+                <h4 className="page-title">friends {users.length}</h4>
               </div>
               <div className="filter-menu">
                 <button className="active" data-filter="*">all</button>
@@ -27,6 +60,7 @@ export default class Friend extends Component {
                 <button data-filter=".collage">collage</button>
                 <button data-filter=".request">request</button>
               </div>
+            {/*
               <div className="post-settings-bar">
                 <span />
                 <span />
@@ -39,6 +73,8 @@ export default class Friend extends Component {
                   </ul>
                 </div>
               </div>
+            
+            */}
             </div>
           </div>
         </div>
@@ -52,686 +88,69 @@ export default class Friend extends Component {
           <div className="col-12">
             <div className="content-box friends-zone">
               <div className="row mt--20 friends-list">
-                <div className="col-lg-3 col-sm-6 recently request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-1.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">Kate Midiltoin</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 relative">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-4.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">Jon Wileyam</a></h6>
-                      <button className="add-frnd">add friend</button>
+                {
+                  users.length > 0 ? users.map((users,i)=>(
+                    <div className="col-lg-3 col-sm-6 recently " key={i}>
+                    <div className="friend-list-view">
+                      {/* profile picture end */}
+                      <div className="profile-thumb">
+                        <Link to={`/user/${users._id}`}>
+                          <figure className="profile-thumb-middle">
+                            <img src="" onError={i=>i.target.src=`${NoProfile}`} alt="profile" />
+                          </figure>
+                        </Link>
+                      </div>
+                      {/* profile picture end */}
+                      <div className="posted-author">
+                        <h6 className="author"><Link to="/user">Kate Midiltoin</Link></h6>
+                        <button className="add-frnd">add friend</button>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently collage request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-7.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">william henry</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 relative request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-22.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">Kate Midiltoin</a></h6>
-                      <button className="add-frnd">friend request sent</button>
+                  )):("")
+                }
+                                {
+                  user.followers > 0 ? user.followers.map((users,i)=>(
+                    <div className="col-lg-3 col-sm-6 collage " key={i}>
+                    <div className="friend-list-view">
+                      {/* profile picture end */}
+                      <div className="profile-thumb">
+                        <Link to={`/user/${users._id}`}>
+                          <figure className="profile-thumb-middle">
+                            <img src="" onError={i=>i.target.src=`${NoProfile}`} alt="profile" />
+                          </figure>
+                        </Link>
+                      </div>
+                      {/* profile picture end */}
+                      <div className="posted-author">
+                        <h6 className="author"><Link to="/user">Kate Midiltoin</Link></h6>
+                        <button className="add-frnd">add friend</button>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently collage">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-10.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">Omio Morganik</a></h6>
-                      <button className="add-frnd">friend request sent</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 relative">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-13.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">william henry</a></h6>
-                      <button className="add-frnd">add friend</button>
+                  )):("" )
+                }
+                                                {
+                  user.following > 0 ? user.following.map((users,i)=>(
+                    <div className="col-lg-3 col-sm-6 relative " key={i}>
+                    <div className="friend-list-view">
+                      {/* profile picture end */}
+                      <div className="profile-thumb">
+                        <Link to={`/user/${users._id}`}>
+                          <figure className="profile-thumb-middle">
+                            <img src="" onError={i=>i.target.src=`${NoProfile}`} alt="profile" />
+                          </figure>
+                        </Link>
+                      </div>
+                      {/* profile picture end */}
+                      <div className="posted-author">
+                        <h6 className="author"><Link to="/user">Kate Midiltoin</Link></h6>
+                        <button className="add-frnd">add friend</button>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 collage request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-18.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">erik jonson</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 relative request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-25.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">peter looks</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently collage">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-16.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">jhon doe</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 relative request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-12.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">william henry</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently collage">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-9.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">william henry</a></h6>
-                      <button className="add-frnd">friend request sent</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-17.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">musa kollins</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 relative collage">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-11.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">petter jhon</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 request collage">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-20.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">henry william</a></h6>
-                      <button className="add-frnd">friend request sent</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently relative">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-32.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">cristian paul</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 relative collage request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-31.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">willson merry</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 request recently">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-29.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">jhonsina boss</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-26.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">william jowel</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 relative collage">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-19.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">ashim pual</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-23.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">Barak Obama</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-1.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">Kate Midiltoin</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 relative">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-4.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">Jon Wileyam</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently collage request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-7.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">william henry</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 relative request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-22.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">Kate Midiltoin</a></h6>
-                      <button className="add-frnd">friend request sent</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently collage">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-10.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">Omio Morganik</a></h6>
-                      <button className="add-frnd">friend request sent</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 relative">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-13.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">william henry</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 collage request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-18.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">erik jonson</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 relative request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-25.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">peter looks</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently collage">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-16.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">jhon doe</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 relative request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-12.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">william henry</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently collage">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-9.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">william henry</a></h6>
-                      <button className="add-frnd">friend request sent</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-17.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">musa kollins</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 relative collage">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-11.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">petter jhon</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 request collage">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-20.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">henry william</a></h6>
-                      <button className="add-frnd">friend request sent</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently relative">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-32.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">cristian paul</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 relative collage request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-31.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">willson merry</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 request recently">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-29.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">jhonsina boss</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-26.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">william jowel</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 relative collage">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-19.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">ashim pual</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-sm-6 recently request">
-                  <div className="friend-list-view">
-                    {/* profile picture end */}
-                    <div className="profile-thumb">
-                      <a href="#">
-                        <figure className="profile-thumb-middle">
-                          <img src="assets/images/profile/profile-small-23.jpg" alt="profile picture" />
-                        </figure>
-                      </a>
-                    </div>
-                    {/* profile picture end */}
-                    <div className="posted-author">
-                      <h6 className="author"><a href="profile.html">Barak Obama</a></h6>
-                      <button className="add-frnd">add friend</button>
-                    </div>
-                  </div>
-                </div>
+                  )):("")
+                }
               </div>
             </div>
           </div>

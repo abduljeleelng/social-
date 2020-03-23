@@ -15,6 +15,7 @@ export default class Edit extends Component {
             about:"",
             userId:"",
             token:"",
+            reload:"false",
         }
     }
     handleChange=name=>e=>{
@@ -27,7 +28,8 @@ export default class Edit extends Component {
         const aboutme = {occupation,address,education,interest,about}
         updateAbout(userId,token,aboutme).then(data=>{
             if(data.error){return console.log(data.error)}
-            this.setState({loading:false});
+            this.setState({loading:false, reload:true});
+            window.location.reload();
         });
     }
     componentDidMount(){
@@ -52,7 +54,7 @@ export default class Edit extends Component {
                 <hr />
                 {loading ? 
                     (<p className="" > loading ...</p>):
-                    (<button className="btn btn-danger" type="submit" onClick={this.handleSave} > Save ...</button>)
+                    (<button className="btn btn-danger btn-share" type="submit" onClick={this.handleSave} > Save ...</button>)
                   }
                 </form>
             </div>

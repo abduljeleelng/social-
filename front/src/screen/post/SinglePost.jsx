@@ -89,7 +89,6 @@ class SinglePost extends Component{
     };
     componentDidMount(){
         const postId = this.props.match.params.postId;
-        console.log(JSON.stringify(postId))
         if (!postId){
             this.setState({redirect:true});
         }

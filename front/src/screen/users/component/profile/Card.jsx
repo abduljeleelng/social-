@@ -44,7 +44,7 @@ export  const ProfileHeader =({ userId, cover,photo, nophoto, nocover})=> {
                 </div>
                 <div className="col-lg-2 col-md-3 d-none d-md-block">
                   <div className="profile-edit-panel">
-                   {isAuthenticated().user && isAuthenticated().user._id === userId ? (<Link to="/user/edit"><button className="edit-btn">edit profile</button></Link>):("")} 
+                   {isAuthenticated().user && isAuthenticated().user._id === userId ? (<Link to="/edit"><button className="edit-btn">edit profile</button></Link>):("")} 
                   </div>
                 </div>
               </div>
