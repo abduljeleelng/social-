@@ -30,6 +30,9 @@ exports.allUsers=(req,res)=>{
          res.json({user})
     }).select("firstName lastName gender email updated created")
 };
+exports.user=(req,res)=>{
+  return res.json(req.profile)
+};
 exports.getUser=(req,res)=>{
     req.profile.hashed_password = undefined;
     req.profile.salt = undefined;

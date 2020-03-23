@@ -6,7 +6,7 @@ import { ReadPostCard,EmptyPost } from '../post/component';
 import {isAuthenticated} from "../../auth/index";
 import { Redirect } from 'react-router-dom';
 import { postBy, photoAPI } from '../post/apiPost.jsx';
-import {userList} from './API';
+import {userList, user} from './API';
 import DefaultImage from "../post/defaultImage.jpg";
 import NoCover from "./images/mountains.jpg";
 import NoProfile from "./images/avatar.jpg";
@@ -19,6 +19,7 @@ export default class Timeline extends Component {
       redirecToPost:false,
       post:[],
       user:[],
+      about:{},
     }
   }
   
@@ -26,10 +27,6 @@ export default class Timeline extends Component {
     const { _id } = isAuthenticated().user;
     this.setState({userId:_id});
     postBy(_id).then((data,err)=>{
-        if(err){
-            console.log(err)
-         //this.setState({redirecToPost:true});
-        }
         if(data.error){
            console.log(data.error)
         }else{
@@ -42,9 +39,13 @@ export default class Timeline extends Component {
       }
       this.setState({user:data.user});
     });
+    user(_id).then(data=>{
+      if(data.error){return console.log(data.error)}
+      this.setState({about:data})
+    })
   }
     render() {
-      const {auth,userId,redirect,post,user}=this.state;
+      const {auth,userId,redirect,post,user,about}=this.state;
       if(redirect){ return <Redirect to="/" />}
         return (
  <>
@@ -55,7 +56,7 @@ export default class Timeline extends Component {
     <ProfileHeader userId={userId} cover="" nocover={NoCover} photo="" nophoto={NoProfile} />
     <div className="container">
       <div className="row">
-          <LeftSideBar />
+          <LeftSideBar about={about}   />
           <div className="col-lg-6 order-1 order-lg-2">
           <CreatePost profileImage="" noProfileImage={NoProfile} />
           { post.length > 0 ? post.map((post,index)=>(

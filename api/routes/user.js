@@ -7,8 +7,10 @@ const {createUserValidator} = require('../validator');
 
 //any router containing user by Id, our route will first executing userById method
 router.get('/alluser', allUsers);
+
 //router.get('/user/:userId',requireSign,getUser);
 router.get('/user/:userId', getUser);
+//router.get('/user/:userId', getUser);
 router.put('/user/:userId',requireSign,updateUser);
 router.delete('/user/:userId',requireSign,deleteUser);
 //

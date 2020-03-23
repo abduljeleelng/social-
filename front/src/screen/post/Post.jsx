@@ -4,12 +4,13 @@ import {MainHeader, SecondHeader } from '../../componet/Header.jsx';
 import {postList,photoAPI,deletePost} from "./apiPost";
 import {isAuthenticated} from "../../auth/index";
 import CreatePost from "./CreatePost";
-import { CardProfile, LikeCard, TopNew } from './component/RSideBar.jsx';
+//import { CardProfile, LikeCard, TopNew } from './component/RSideBar.jsx';
+import { CardProfile, LikeCard } from './component/RSideBar.jsx';
 import { Notifications, Advert, FriendsZOne } from './component/LSideBar';
 import NoCover from "../../images/mountains.jpg";
 import DefaultImage from "./defaultImage.jpg";
 import NoProfile from "../users/images/avatar.jpg";
-import { user } from '../users/API';
+import { user, userList } from '../users/API';
 
 class Post extends Component{
     constructor(props){
@@ -20,6 +21,7 @@ class Post extends Component{
             auth:true,
             loading:true,
             user:"",
+            users:[],
         };
     };
     loadPosts(page){
@@ -48,6 +50,10 @@ class Post extends Component{
                 if(data.error){return console.log(data.error)}
                 this.setState({user:data})
             });
+            userList().then(data=>{
+                if(data.error){ return console.log(data.error)}
+                this.setState({users:data.user});
+            })
 
         }catch(error){
             console.log(error)
@@ -64,9 +70,9 @@ class Post extends Component{
       })
     }
     render(){
-        const {post,auth,loading,user} = this.state;
+        const {post,auth,loading,user,users} = this.state;
         const userId = isAuthenticated().user._id
-        console.log(JSON.stringify(user))
+        //console.log(JSON.stringify(users))
         return(
             <>
             <MainHeader noProfilePhoto={NoProfile} profilePhoto=""  />
@@ -97,8 +103,8 @@ class Post extends Component{
         <div className="col-lg-3 order-2 order-lg-1">
           <aside className="widget-area">
                     <CardProfile noProfilePhoto={NoProfile} profilePhoto="" coverPhoto="" noCoverPhoto={NoCover} userId={userId} user={user} />
-                    <LikeCard />
-                    <TopNew />
+                    <LikeCard users={users} noProfilePhoto={NoProfile} profilePhoto="" />
+                    {/*<TopNew />*/}
           </aside>
         </div>
        <div className="col-lg-6 order-1 order-lg-2" >

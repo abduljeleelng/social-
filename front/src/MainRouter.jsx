@@ -13,16 +13,23 @@ import PrivateRoute from "./auth/PrivateRoute";
 const MainRouter = () => (
     <div>
         <Switch>
-            <PrivateRoute exact path="/user" component={Timeline}   />
+            
             <PrivateRoute exact path="/" component={Post}  />
-            <Route exact path="/user/:userId" component={Profile} />
             <Route exact path="/post/:postId" component={SinglePost}  />
-            {/*
+            <PrivateRoute exact path="/user" component={Timeline}   />
+            <Route exact path="/user/:userId" component={Profile} />
+           
+            
+        
+            {
+            /*
+            <PrivateRoute exact path="/user/edit" component={EditProfile} />
             <Route exact path="/about/:userId" component={About} />
             <Route exact path="/photo/:userId" component={Photo} />
             <Route exact path="/friend/:userId" component={Friend} />
             <PrivateRoute exact path="/user/edit" component={EditProfile} />
- */}
+            */
+            }
         </Switch>
     </div>
 );
